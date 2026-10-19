@@ -6,7 +6,12 @@ import { logoutAction, playerSetupAction } from "../actions";
 
 export const dynamic = "force-dynamic";
 
-export default async function Start() {
+export default async function Start({
+  searchParams,
+}: {
+  searchParams: Promise<{ e?: string }>;
+}) {
+  const { e } = await searchParams;
   const me = await currentPlayer();
   if (!me) redirect("/login");
   if (me.setup_done) redirect("/");
@@ -23,23 +28,31 @@ export default async function Start() {
         New here? <Link href="/help">Read how it works first.</Link> It is in the Help tab afterwards too.
       </div>
 
+      {e && <div className="note err">{e}</div>}
+
       <form action={playerSetupAction}>
         <div className="card">
           <h2 style={{ marginTop: 0 }}>What are you saving for?</h2>
           <p className="hint">
             Real things with real prices. Two is plenty; you can add more later.
+            <strong> The grey words are only examples. Type your own name and price; nothing here is filled in for you.</strong>
           </p>
           {[1, 2, 3].map((i) => (
             <div key={i} style={{ marginBottom: 14 }}>
+              <label htmlFor={`goal${i}_name`}>{i === 1 ? "Goal 1 (needed)" : `Goal ${i} (optional)`}</label>
               <input
+                id={`goal${i}_name`}
                 name={`goal${i}_name`}
-                placeholder={i === 1 ? "Trainers" : i === 2 ? "Concert ticket" : "Something else"}
+                placeholder={i === 1 ? "e.g. Trainers" : i === 2 ? "e.g. Concert ticket" : "e.g. Something else"}
                 autoComplete="off"
+                required={i === 1}
               />
               <span className="pound"><input
                 name={`goal${i}_price`}
-                placeholder={i === 1 ? "75" : i === 2 ? "48" : "price"}
+                aria-label={`Goal ${i} price`}
+                placeholder={i === 1 ? "e.g. 75" : i === 2 ? "e.g. 48" : "price"}
                 inputMode="decimal"
+                required={i === 1}
               /></span>
             </div>
           ))}

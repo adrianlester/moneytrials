@@ -77,7 +77,15 @@ export async function playerSetupAction(formData: FormData): Promise<void> {
   const me = await currentPlayer();
   if (!me) redirect("/login");
 
-  // Two or three real wants, with real prices.
+  // Two or three real wants, with real prices. At least one is needed: the form shows
+  // grey example text and it is easy to take that for a filled-in answer.
+  let goalsGiven = 0;
+  for (let i = 1; i <= 3; i++) {
+    if (String(formData.get(`goal${i}_name`) ?? "").trim() && parsePounds(String(formData.get(`goal${i}_price`) ?? ""))) goalsGiven++;
+  }
+  if (goalsGiven === 0) {
+    redirect(`/start?e=${encodeURIComponent("Add at least one goal with a name and a price. The grey words are only examples.")}`);
+  }
   for (let i = 1; i <= 3; i++) {
     const gname = String(formData.get(`goal${i}_name`) ?? "").trim();
     const price = parsePounds(String(formData.get(`goal${i}_price`) ?? ""));

@@ -47,7 +47,7 @@ export const EVENINGS: Record<EveningKind, EveningRule> = {
   making: {
     kind: "making",
     label: "Making",
-    blurb: "Turn supplies into stock. Costs nothing tonight.",
+    blurb: "Turn supplies into stock. Buy supplies first, on the Hustle tab.",
     earns: 0,
     costRange: null,
     feedsEnjoyment: false,

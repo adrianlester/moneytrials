@@ -434,7 +434,7 @@ export default async function Home({
       <h2>Goals</h2>
       {gn && <div className="note">{gn}</div>}
       {ge && <div className="note err">{ge}</div>}
-      {goals.length === 0 && <div className="card"><p className="sub">No goals open.</p></div>}
+      {goals.length === 0 && <div className="card"><p className="sub">You have no goals yet. Add one below: a name and a price.</p></div>}
       {goals.map((g) => {
         const pct = Math.min(100, Math.round((g.saved_amount / g.target_amount) * 100));
         const funded = g.saved_amount >= g.target_amount;

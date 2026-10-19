@@ -68,6 +68,11 @@ export default async function Hustle({
       {n && <div className="note">{n}</div>}
       {e && <div className="note err">{e}</div>}
       {marketNotes.map((m, i) => <div className="note" key={i}>{m}</div>)}
+      {supplies === 0 && evenings.length > 0 && (
+        <div className="note">
+          You have a Making evening free and no {craft.supplyName}. Buy a batch under {supplyTitle} below first.
+        </div>
+      )}
 
       {pending.length > 0 && (
         <>
@@ -116,7 +121,7 @@ export default async function Hustle({
         <div className="row">
           <span className="label">
             Batches in the cupboard
-            <span className="blurb">{gbpShort(craft.batchCost)} a batch, from Goals first.</span>
+            <span className="blurb">{gbpShort(craft.batchCost)} a batch. It comes out of Goals first, then Enjoyment, so you need money in one of them.</span>
           </span>
           <span className={`amount${supplies === 0 ? " zero" : ""}`}>{supplies}</span>
         </div>
