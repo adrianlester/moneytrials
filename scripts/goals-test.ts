@@ -65,6 +65,9 @@ async function main() {
   check("a third goal can be added", a.ok);
   a = await addGoal(robin, "Another", 1000);
   check("a third open goal is allowed", a.ok);
+  a = await addGoal(robin, "another", 1000);
+  const dupes = await one<{ n: number }>(`SELECT COUNT(*) AS n FROM goal WHERE player_id=$1 AND bought_at IS NULL AND lower(name)='another'`, [robin]);
+  check("the same goal sent twice is one goal", a.ok && Number(dupes?.n) === 1, `${dupes?.n}`);
   a = await addGoal(robin, "One too many", 1000);
   check("a fourth open goal is refused", !a.ok, a.ok ? "" : a.error);
   await buyGoal(robin, week.id, day, skates.id).catch(() => null);

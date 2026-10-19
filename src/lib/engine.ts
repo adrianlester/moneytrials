@@ -796,6 +796,12 @@ export async function addGoal(
     `SELECT COUNT(*) AS n FROM goal WHERE player_id = $1 AND bought_at IS NULL`,
     [playerId],
   );
+  // The same goal sent twice (a double tap) is one goal.
+  const twin = await one(
+    `SELECT 1 AS x FROM goal WHERE player_id = $1 AND bought_at IS NULL AND lower(name) = lower($2) AND target_amount = $3`,
+    [playerId, name.trim(), price],
+  );
+  if (twin) return { ok: true };
   if (Number(open?.n) >= MAX_OPEN_GOALS) {
     return { ok: false, error: `You already have ${MAX_OPEN_GOALS} goals open.` };
   }

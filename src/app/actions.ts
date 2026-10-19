@@ -86,6 +86,12 @@ export async function playerSetupAction(formData: FormData): Promise<void> {
   if (goalsGiven === 0) {
     redirect(`/start?e=${encodeURIComponent("Add at least one goal with a name and a price. The grey words are only examples.")}`);
   }
+  // Claim the setup before writing anything. A slow page invites repeat taps, and every extra
+  // submit used to add the whole set of goals again (57 rows from 19 taps, 19 Oct). Only the
+  // first submit gets past this line.
+  const claimed = await q(`UPDATE player SET setup_done = TRUE WHERE id = $1 AND setup_done = FALSE RETURNING id`, [me.id]);
+  if (!claimed.length) redirect("/");
+
   for (let i = 1; i <= 3; i++) {
     const gname = String(formData.get(`goal${i}_name`) ?? "").trim();
     const price = parsePounds(String(formData.get(`goal${i}_price`) ?? ""));
