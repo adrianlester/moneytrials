@@ -86,7 +86,7 @@ penalty. `npx tsx --conditions=react-server scripts/asks-test.ts` (needs `PGLITE
 **Phase 3, fundraisers (12 Oct) — built and tested.** `startFundraiser` in `asks.ts`; a fundraiser
 reaches the other player as an ask. `scripts/fundraisers-test.ts`. `/help` is the how-to-play page.
 
-**Phase 4 (12 Oct) — built and tested.** `admin.ts`, `loans.ts`, `report.ts`; pages under `app/admin`, `app/account`, `app/report`. `scripts/phase4-test.ts`. Difficulty decks are overrides stored as `<card id>@<deck>`; `cardForPlayer()` in `engine.ts` is the one place a card is shown to a player.
+**Phase 4 (12 Oct) — built and tested.** `admin.ts`, `commitments.ts`, `report.ts`; pages under `app/admin`, `app/account`, `app/report`. `scripts/phase4-test.ts`. Difficulty decks are overrides stored as `<card id>@<deck>`; `cardForPlayer()` in `engine.ts` is the one place a card is shown to a player.
 
 **Not built yet:** nothing in the spec. Out of scope for v1 per the spec: investing, interest, credit cards, BNPL, notifications.
 

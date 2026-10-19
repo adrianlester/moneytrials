@@ -4,15 +4,15 @@ import { one } from "@/lib/db";
 import { currentPlayer } from "@/lib/auth";
 import { currentSeason, causesFor } from "@/lib/seed";
 import { gbp } from "@/lib/money";
-import { currentLoan, loanTerms, pendingCommitmentRequest } from "@/lib/loans";
+import { pendingCommitmentRequest } from "@/lib/commitments";
 import {
-  acceptLoanAction, declineOfferAction, requestCommitmentAction, requestLoanAction, setCauseAction,
+  requestCommitmentAction, setCauseAction,
 } from "../actions";
 import { Nav } from "../nav";
 
 export const dynamic = "force-dynamic";
 
-/** Loans and Committed Giving, the two things a player can ask the admin for. */
+/** Committed Giving: the cause is free to change, the amount needs the admin's yes. */
 export default async function Account({
   searchParams,
 }: {
@@ -25,7 +25,6 @@ export default async function Account({
   const season = await currentSeason();
   if (!season) redirect("/setup");
 
-  const loan = await currentLoan(me.id);
   const admin = await one<{ display_name: string }>(
     `SELECT display_name FROM player WHERE season_id = $1 AND role = 'admin' LIMIT 1`, [season.id],
   );
@@ -37,68 +36,12 @@ export default async function Account({
   const causes = await causesFor(season.id);
 
 
-  const canAsk = !loan || loan.status === "declined" || loan.status === "repaid";
-
   return (
     <main>
       <h1>Your account</h1>
       <p className="sub">Things you can ask {admin?.display_name ?? "your parent"} for.</p>
       {m && <div className="note">{m}</div>}
       {e && <div className="note err">{e}</div>}
-
-      <h2>Loan</h2>
-      {loan?.status === "requested" && (
-        <div className="card">
-          <p>You asked for {gbp(loan.asked_amount)}. Waiting to hear back.</p>
-        </div>
-      )}
-      {loan?.status === "offered" && (
-        <div className="card big">
-          <p><strong>Terms for a loan of {gbp(loan.principal)}</strong></p>
-          <p>{loanTerms(loan, admin?.display_name ?? "your parent")}</p>
-          <form action={acceptLoanAction}>
-            <input type="hidden" name="loan_id" value={loan.id} />
-            <button type="submit" className="primary">Accept these terms</button>
-          </form>
-          <form action={declineOfferAction}>
-            <input type="hidden" name="loan_id" value={loan.id} />
-            <button type="submit">No thanks</button>
-          </form>
-        </div>
-      )}
-      {loan?.status === "active" && (
-        <div className="card">
-          <div className="row">
-            <span className="label">Still to pay back</span>
-            <span className="amount">{gbp(loan.outstanding)}</span>
-          </div>
-          <div className="row">
-            <span className="label">Each payday</span>
-            <span className="amount">{gbp(Math.min(loan.weekly_repayment, loan.outstanding))}</span>
-          </div>
-          <p className="hint">Taken out at payday before you allocate anything. No interest.</p>
-        </div>
-      )}
-      {loan?.status === "repaid" && <div className="note">Your last loan is paid off.</div>}
-      {loan?.status === "declined" && <div className="note">Your last request wasn&apos;t taken up.</div>}
-      {canAsk && (
-        <form action={requestLoanAction} className="card">
-          <div className="field">
-            <label htmlFor="loan_amount">Ask for a loan</label>
-            <span className="pound">
-              <input id="loan_amount" name="amount" inputMode="decimal" placeholder="0" autoComplete="off" />
-            </span>
-          </div>
-          <div className="field">
-            <label htmlFor="loan_reason">What for? (optional)</label>
-            <input id="loan_reason" name="reason" autoComplete="off" />
-          </div>
-          <button type="submit">Ask</button>
-          <p className="hint" style={{ marginTop: 10 }}>
-            You&apos;ll see the terms before any money moves, and you can say no to them.
-          </p>
-        </form>
-      )}
 
       <h2>Committed Giving</h2>
       <div className="card">

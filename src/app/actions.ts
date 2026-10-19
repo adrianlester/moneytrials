@@ -15,8 +15,8 @@ import { EVENINGS_PER_WEEK } from "@/lib/evenings";
 import { craftRule } from "@/lib/hustle-data";
 import { answerAsk, startFundraiser } from "@/lib/asks";
 import {
-  acceptLoan, declineLoan, requestCommitmentChange, requestLoan, setCommittedCause, type Result,
-} from "@/lib/loans";
+  requestCommitmentChange, setCommittedCause, type Result,
+} from "@/lib/commitments";
 import { buySupplies, decideSales, makeOn, pendingSales } from "@/lib/hustle";
 
 /* ------------------------------------------------------------------- setup */
@@ -335,7 +335,7 @@ export async function startFundraiserAction(formData: FormData): Promise<void> {
   redirect(`/?${res.ok ? "an" : "ae"}=${encodeURIComponent(res.ok ? res.message : res.error)}`);
 }
 
-/* ----------------------------------------------------------- account: loans etc. */
+/* ------------------------------------------------------------------ account */
 
 function accountBack(r: Result): never {
   revalidatePath("/account");
@@ -348,26 +348,6 @@ async function player() {
   const season = await currentSeason();
   if (!season) redirect("/setup");
   return { me, season, day: londonToday() };
-}
-
-export async function requestLoanAction(formData: FormData): Promise<void> {
-  const { me, day } = await player();
-  const amount = parsePounds(String(formData.get("amount") ?? ""));
-  accountBack(await requestLoan(me.id, day, amount ?? 0, String(formData.get("reason") ?? "")));
-}
-
-export async function acceptLoanAction(formData: FormData): Promise<void> {
-  const { me, season, day } = await player();
-  const week = await weekFor(season.id, day);
-  const admin = await one<{ display_name: string }>(
-    `SELECT display_name FROM player WHERE season_id = $1 AND role = 'admin' LIMIT 1`, [season.id],
-  );
-  accountBack(await acceptLoan(me.id, week?.id ?? null, day, String(formData.get("loan_id") ?? ""), admin?.display_name ?? "your parent"));
-}
-
-export async function declineOfferAction(formData: FormData): Promise<void> {
-  const { day } = await player();
-  accountBack(await declineLoan(String(formData.get("loan_id") ?? ""), day));
 }
 
 export async function requestCommitmentAction(formData: FormData): Promise<void> {

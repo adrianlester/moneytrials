@@ -578,11 +578,6 @@ export interface PaydayView {
   committed: number;
   committedCause: string | null;
   available: number;
-  /** An active loan's repayment due this payday, what could be covered, and what could not. */
-  loanId: string | null;
-  loanDue: number;
-  loanPaid: number;
-  loanShortfall: number;
   alreadyAllocated: boolean;
   nextWeek: { idx: number; amount: number; band: string } | null;
 }
@@ -640,16 +635,8 @@ export async function paydayView(
     if (nr) nextWeek = { idx: next.idx, amount: nr.amount, band: nr.band };
   }
 
-  // A loan repayment comes out before anything is allocated, like Committed Giving.
-  const loan = await one<{ id: string; outstanding: number; weekly_repayment: number }>(
-    `SELECT id, outstanding, weekly_repayment FROM loan WHERE player_id = $1 AND status = 'active'`,
-    [playerId],
-  );
-  const loanDue = loan ? Math.min(loan.weekly_repayment, loan.outstanding) : 0;
-
   const wage = roll?.amount ?? 0;
   const gross = Math.max(0, wage + Math.max(0, banked) - committed);
-  const loanPaid = Math.min(loanDue, gross);
   return {
     week,
     wage,
@@ -657,11 +644,7 @@ export async function paydayView(
     banked: Math.max(0, banked),
     committed,
     committedCause: commitment?.cause ?? null,
-    available: gross - loanPaid,
-    loanId: loan?.id ?? null,
-    loanDue,
-    loanPaid,
-    loanShortfall: loanDue - loanPaid,
+    available: gross,
     alreadyAllocated: roll?.allocated ?? false,
     nextWeek,
   };
@@ -709,27 +692,6 @@ export async function runPayday(
       view.committedCause ? `Committed giving — ${view.committedCause}` : "Committed giving",
     );
     notes.push(`${fmt(view.committed)} left for ${view.committedCause ?? "your cause"} before you saw it.`);
-  }
-
-  if (view.loanId && view.loanDue > 0) {
-    if (view.loanPaid > 0) {
-      await post(playerId, view.week.id, day, "loan_repayment", -view.loanPaid, null, `Loan repayment, week ${view.week.idx}`);
-      await q(
-        `UPDATE loan SET outstanding = outstanding - $2,
-                status = CASE WHEN outstanding - $2 <= 0 THEN 'repaid' ELSE status END
-          WHERE id = $1`,
-        [view.loanId, view.loanPaid],
-      );
-      notes.push(`${fmt(view.loanPaid)} went on your loan before you saw it.`);
-    }
-    if (view.loanShortfall > 0) {
-      // Defaulting fails the week. What was missed stays owing.
-      await post(
-        playerId, view.week.id, day, "unpaid_obligation", 0, null,
-        `Loan repayment ${fmt(view.loanShortfall)} short`,
-      );
-      notes.push(`The loan repayment was ${fmt(view.loanShortfall)} short. That counts as a failed week and it is still owed.`);
-    }
   }
 
   // Bills and Committed Giving don't roll over; clear before re-assigning.

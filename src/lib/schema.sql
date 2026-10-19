@@ -334,26 +334,6 @@ ALTER TABLE stock_item ADD COLUMN IF NOT EXISTS fundraiser_id UUID REFERENCES fu
 ALTER TABLE season ADD COLUMN IF NOT EXISTS paused_on DATE
 ;
 
--- Loans. requested -> offered (admin sets terms) -> active (player accepts) -> repaid.
--- A request can end as declined, by the admin or by the player turning down the terms.
--- No interest: the lesson is the repayment, not the arithmetic of compounding (spec section 13).
-CREATE TABLE IF NOT EXISTS loan (
-  id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  player_id        UUID NOT NULL REFERENCES player(id) ON DELETE CASCADE,
-  status           TEXT NOT NULL DEFAULT 'requested'
-                   CHECK (status IN ('requested','offered','active','repaid','declined')),
-  asked_amount     INTEGER NOT NULL,
-  reason           TEXT NOT NULL DEFAULT '',
-  principal        INTEGER NOT NULL DEFAULT 0,
-  weekly_repayment INTEGER NOT NULL DEFAULT 0,
-  weeks            INTEGER NOT NULL DEFAULT 0,
-  outstanding      INTEGER NOT NULL DEFAULT 0,
-  requested_on     DATE NOT NULL,
-  decided_on       DATE,
-  accepted_on      DATE
-)
-;
-
 -- A change to the locked Committed Giving amount needs the admin's approval (spec section 5).
 CREATE TABLE IF NOT EXISTS commitment_request (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),

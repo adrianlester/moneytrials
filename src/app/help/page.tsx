@@ -111,17 +111,10 @@ export default function Help() {
       </div>
 
       <div className="card">
-        <h2 style={{ marginTop: 0 }}>Loans and changing your giving</h2>
+        <h2 style={{ marginTop: 0 }}>Changing your giving</h2>
         <p>
-          Under More on the Today tab there is Your account. You can ask for a loan there. Your
-          parent sets the terms and you read them before any money moves. You can say no. If you say
-          yes, the money arrives with your next wage and a repayment comes out at each payday
-          before you allocate anything. There is no interest. A payment you can&apos;t cover fails
-          that week and is still owed.
-        </p>
-        <p>
-          Your Committed Giving amount is fixed for the season. You can ask to change it and your
-          parent decides. You can change the cause whenever you like.
+          Your Committed Giving amount is fixed for the season. You can ask to change it under
+          Your account, in More on the Today tab, and your parent decides. You can change the cause whenever you like.
         </p>
       </div>
 

@@ -1,5 +1,5 @@
 /**
- * Phase 4: loans, giving-change approval, match-funding, difficulty decks, pause / resume /
+ * Phase 4: giving-change approval, match-funding, difficulty decks, pause / resume /
  * extend, season end and the report. Run against a throwaway PGlite:
  * PGLITE_DIR=$TEMP/p4-test npx tsx --conditions=react-server scripts/phase4-test.ts
  */
@@ -8,7 +8,7 @@ import { createSeason } from "../src/lib/seed";
 import {
   addDays, cardForPlayer, dealCard, endSeasonIfDone, envelopeOf, paydayView, runPayday, weekFor,
 } from "../src/lib/engine";
-import { acceptLoan, currentLoan, decideCommitment, declineLoan, offerLoan, requestCommitmentChange, requestLoan } from "../src/lib/loans";
+import { decideCommitment, requestCommitmentChange } from "../src/lib/commitments";
 import {
   buildTierDeck, extendSeason, matchFundraiser, pauseSeason, resumeSeason, saveCard, scaleCard,
   setAskFrequency, setPlayerDeck, setPlayerWage, validateCard, createCard, cardForEdit,
@@ -37,59 +37,12 @@ async function main() {
   const w1 = "2026-09-19";
   const w2 = "2026-09-26";
 
-  /* ---------------------------------------------------------------- loans */
-  let r = await requestLoan(robin, w1, 6000, "bike lock");
-  check("request a loan", r.ok);
-  r = await requestLoan(robin, w1, 1000, "");
-  check("only one loan at a time", !r.ok);
-  const l0 = (await currentLoan(robin))!;
-  r = await offerLoan(l0.id, w1, 6000, 1000, 4);
-  check("terms that do not repay the loan are refused", !r.ok, r.ok ? "" : r.error);
-  r = await offerLoan(l0.id, w1, 6000, 2000, 3);
-  check("admin sets terms", r.ok);
-  r = await acceptLoan(sam, null, w1, l0.id, "Dad");
-  check("another player cannot accept it", !r.ok);
-  const bankedBefore = Number((await one<{ s: number }>(`SELECT COALESCE(SUM(amount),0) AS s FROM ledger WHERE player_id=$1 AND type='banked'`, [robin]))!.s);
-  r = await acceptLoan(robin, null, w1, l0.id, "Dad");
-  check("player accepts and the money is banked, not in an envelope", r.ok
-    && Number((await one<{ s: number }>(`SELECT COALESCE(SUM(amount),0) AS s FROM ledger WHERE player_id=$1 AND type='banked'`, [robin]))!.s) === bankedBefore + 6000);
-
-  // Week 1 payday (day 1): loan is active, so the first repayment is due.
-  let view = (await paydayView(robin, seasonId, w1, 9500, false))!;
-  check("repayment is shown on payday", view.loanDue === 2000 && view.loanPaid === 2000 && view.loanShortfall === 0, JSON.stringify([view.loanDue, view.available]));
+  /* -------------------------------------------------------------- payday */
+  let r: Awaited<ReturnType<typeof requestCommitmentChange>>;
+  const view = (await paydayView(robin, seasonId, w1, 9500, false))!;
+  check("payday view has the whole wage to allocate", view.available === 9500, String(view.available));
   const pay1 = await runPayday(robin, view, w1, { bills: view.available });
-  check("payday runs with the repayment taken first", pay1.ok);
-  const loan1 = (await currentLoan(robin))!;
-  check("outstanding fell by the repayment", loan1.outstanding === 4000 && loan1.status === "active");
-  const repay = await one<{ n: number }>(`SELECT COUNT(*) AS n FROM ledger WHERE player_id=$1 AND type='loan_repayment'`, [robin]);
-  check("repayment is in the ledger", Number(repay?.n) === 1);
-
-  // The loan money itself arrives with this week's wage; take it out of the picture so the
-  // lean-week test below is about the wage alone.
-  await q(`INSERT INTO ledger (player_id, day, type, amount, note) VALUES ($1,'2026-09-26','banked_in',6000,'test')`, [robin]);
-  // A lean week: wage so low the repayment cannot be covered.
-  await q(`UPDATE wage_roll SET amount = 500 WHERE player_id = $1 AND week_id = (SELECT id FROM week WHERE season_id=$2 AND idx=2)`, [robin, seasonId]);
-  view = (await paydayView(robin, seasonId, w2, 9500, false))!;
-  check("short wage: part paid, the rest is a shortfall", view.loanPaid === 500 && view.loanShortfall === 1500 && view.available === 0, `${view.loanPaid}/${view.loanShortfall}`);
-  const pay2 = await runPayday(robin, view, w2, {});
-  check("payday still runs with nothing to allocate", pay2.ok);
-  const loan2 = (await currentLoan(robin))!;
-  check("shortfall stays owing", loan2.outstanding === 3500);
-  const miss = await one<{ n: number }>(`SELECT COUNT(*) AS n FROM ledger WHERE player_id=$1 AND type='unpaid_obligation'`, [robin]);
-  check("a missed repayment is an unpaid obligation (fails the week)", Number(miss?.n) === 1);
-
-  await q(`UPDATE loan SET outstanding = 1000 WHERE id = $1`, [l0.id]);
-  const w3 = "2026-10-03";
-  view = (await paydayView(robin, seasonId, w3, 9500, false))!;
-  check("the last payment is only what is left", view.loanDue === 1000);
-  await runPayday(robin, view, w3, { bills: view.available });
-  check("loan is marked repaid", (await currentLoan(robin))?.status === "repaid");
-
-  // Decline paths.
-  r = await requestLoan(sam, w1, 3000, "");
-  const lz = (await currentLoan(sam))!;
-  r = await declineLoan(lz.id, w1);
-  check("admin can decline a request", r.ok && (await currentLoan(sam))?.status === "declined");
+  check("payday runs", pay1.ok);
 
   /* ------------------------------------------------------ giving change */
   r = await requestCommitmentChange(sam, w1, 500);
@@ -190,7 +143,7 @@ async function main() {
 
   const rep = await seasonReport(robin);
   check("report: three separate sections", rep.survival.weeksSurvived + rep.survival.weeksFailed === 6 && Array.isArray(rep.goals) && typeof rep.given.total === "number");
-  check("report: the missed loan payment shows as a failed week", rep.survival.weeksFailed >= 1 && rep.survival.obligationsFailed === 1, JSON.stringify(rep.survival.failedWeeks));
+  check("report: survival counts add up", rep.survival.obligationsFailed === 0);
   const repZ = await seasonReport(sam);
   check("report: gave nothing is plain", repZ.given.total > 0 || repZ.given.total === 0);
   check("report: fundraiser matched amount appears", rep.given.raised[0]?.matched === 1500);

@@ -5,7 +5,7 @@
  * week 4's payday, so that form is still there to try.
  *
  * Test logins, throwaway data only:  Robin 1111 | Sam 2222 | Dad (admin) 3333
- * Robin has asked for a loan and Sam has asked to change her Committed Giving, so the admin has two things waiting.
+ * Sam has asked to change her Committed Giving, so the admin has one thing waiting.
  *
  * Run (PGLITE_DIR must point at an empty folder):
  *   $env:PGLITE_DIR = 'C:\Users\adria\Documents\the-season-history'
@@ -23,7 +23,7 @@ import {
   availableMakingEvenings, buySupplies, decideSales, makeOn, pendingSales, projectOf, suppliesOf,
 } from "../src/lib/hustle";
 import { answerAsk, openAsks } from "../src/lib/asks";
-import { requestCommitmentChange, requestLoan } from "../src/lib/loans";
+import { requestCommitmentChange } from "../src/lib/commitments";
 import type { EveningKind } from "../src/lib/evenings";
 
 const START = "2026-09-19"; // a Saturday, so payday is the first day of each week
@@ -146,7 +146,6 @@ async function main() {
   // Something waiting for the admin to decide.
   const robinId = players.find((p) => p.display_name === "Robin")!.id;
   const samId = players.find((p) => p.display_name === "Sam")!.id;
-  await requestLoan(robinId, LAST_DAY, 4000, "Deposit on the inline skates");
   await requestCommitmentChange(samId, LAST_DAY, 500);
 
   const n = async (sql: string) => Number((await q<{ n: number }>(sql))[0].n);

@@ -6,8 +6,8 @@ import { gbp } from "@/lib/money";
 import { londonToday, weekFor } from "@/lib/engine";
 import { allFundraisers, decks } from "@/lib/admin";
 import {
-  buildDeckAction, commitmentDecisionAction, declineLoanAction, extendAction, frequencyAction,
-  matchAction, offerLoanAction, pauseAction, playerAction, resumeAction,
+  buildDeckAction, commitmentDecisionAction, extendAction, frequencyAction,
+  matchAction, pauseAction, playerAction, resumeAction,
 } from "../admin-actions";
 import { AdminNav } from "./admin-nav";
 
@@ -31,11 +31,6 @@ export default async function Admin({
     `SELECT id, display_name, base_wage, wage_variance, deck_id, craft FROM player
       WHERE season_id = $1 AND role = 'player' ORDER BY display_name`, [season.id],
   );
-  const loans = await q<{ id: string; name: string; status: string; asked_amount: number; reason: string; principal: number; weekly_repayment: number; weeks: number; outstanding: number }>(
-    `SELECT l.id, p.display_name AS name, l.status, l.asked_amount, l.reason, l.principal, l.weekly_repayment, l.weeks, l.outstanding
-       FROM loan l JOIN player p ON p.id = l.player_id
-      WHERE p.season_id = $1 AND l.status IN ('requested','offered','active') ORDER BY l.requested_on`, [season.id],
-  );
   const requests = await q<{ id: string; name: string; new_amount: number; current: number }>(
     `SELECT r.id, p.display_name AS name, r.new_amount, c.amount AS current
        FROM commitment_request r JOIN player p ON p.id = r.player_id JOIN commitment c ON c.player_id = r.player_id
@@ -43,7 +38,7 @@ export default async function Admin({
   );
   const funds = await allFundraisers(season.id);
   const deckList = await decks();
-  const waiting = loans.filter((l) => l.status === "requested").length + requests.length;
+  const waiting = requests.length;
 
   return (
     <main>
@@ -58,27 +53,6 @@ export default async function Admin({
 
       <h2>Waiting on you</h2>
       {waiting === 0 && <div className="card"><p className="sub">Nothing waiting.</p></div>}
-      {loans.filter((l) => l.status === "requested").map((l) => (
-        <form action={offerLoanAction} className="card" key={l.id}>
-          <input type="hidden" name="loan_id" value={l.id} />
-          <p><strong>{l.name} asks for a loan of {gbp(l.asked_amount)}</strong></p>
-          {l.reason && <p className="sub">{l.reason}</p>}
-          <div className="field">
-            <label htmlFor={`p-${l.id}`}>Amount you lend</label>
-            <span className="pound"><input id={`p-${l.id}`} name="principal" defaultValue={(l.asked_amount / 100).toFixed(2)} inputMode="decimal" /></span>
-          </div>
-          <div className="field">
-            <label htmlFor={`w-${l.id}`}>Repayment each payday</label>
-            <span className="pound"><input id={`w-${l.id}`} name="weekly" defaultValue={(Math.max(100, Math.round(l.asked_amount / 4 / 50) * 50) / 100).toFixed(2)} inputMode="decimal" /></span>
-          </div>
-          <div className="field">
-            <label htmlFor={`k-${l.id}`}>Over how many weeks (at most)</label>
-            <input id={`k-${l.id}`} name="weeks" defaultValue="4" inputMode="numeric" />
-          </div>
-          <button type="submit" className="primary">Send these terms</button>
-          <button type="submit" formAction={declineLoanAction}>Decline</button>
-        </form>
-      ))}
       {requests.map((r) => (
         <form action={commitmentDecisionAction} className="card" key={r.id}>
           <input type="hidden" name="request_id" value={r.id} />
@@ -89,26 +63,6 @@ export default async function Admin({
         </form>
       ))}
 
-      {loans.filter((l) => l.status !== "requested").length > 0 && (
-        <>
-          <h2>Loans out</h2>
-          <div className="card">
-            {loans.filter((l) => l.status !== "requested").map((l) => (
-              <div className="row" key={l.id}>
-                <span className="label">
-                  {l.name}
-                  <span className="blurb">
-                    {l.status === "offered"
-                      ? `Terms sent: ${gbp(l.principal)}, ${gbp(l.weekly_repayment)} a week. Waiting for ${l.name} to accept.`
-                      : `${gbp(l.weekly_repayment)} a week.`}
-                  </span>
-                </span>
-                <span className="amount">{l.status === "active" ? `${gbp(l.outstanding)} owed` : "offered"}</span>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
 
       <h2>Players</h2>
       {players.map((p) => (

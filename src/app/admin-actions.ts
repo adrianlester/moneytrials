@@ -10,7 +10,7 @@ import {
   buildTierDeck, createCard, extendSeason, matchFundraiser, pauseSeason, removeOverride, resumeSeason,
   saveCard, setAskFrequency, setCardEnabled, setPlayerDeck, setPlayerWage, type Result,
 } from "@/lib/admin";
-import { declineLoan, decideCommitment, offerLoan } from "@/lib/loans";
+import { decideCommitment } from "@/lib/commitments";
 
 /** Every admin action starts here. A player who finds one of these URLs gets bounced home. */
 async function admin() {
@@ -66,21 +66,6 @@ export async function playerAction(f: FormData): Promise<void> {
 export async function buildDeckAction(f: FormData): Promise<void> {
   await admin();
   back("/admin", await buildTierDeck(str(f, "deck"), Number(str(f, "factor"))));
-}
-
-/* -------------------------------------------------------------------- loans */
-
-export async function offerLoanAction(f: FormData): Promise<void> {
-  const { day } = await admin();
-  const principal = parsePounds(str(f, "principal"));
-  const weekly = parsePounds(str(f, "weekly"));
-  if (principal == null || weekly == null) back("/admin", { ok: false, error: "Amounts need to be money." });
-  back("/admin", await offerLoan(str(f, "loan_id"), day, principal, weekly, Number(str(f, "weeks"))));
-}
-
-export async function declineLoanAction(f: FormData): Promise<void> {
-  const { day } = await admin();
-  back("/admin", await declineLoan(str(f, "loan_id"), day));
 }
 
 export async function commitmentDecisionAction(f: FormData): Promise<void> {

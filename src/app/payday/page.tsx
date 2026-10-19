@@ -134,19 +134,6 @@ export default async function Payday({
             <span className="amount neg">−{gbpShort(view.committed)}</span>
           </div>
         )}
-        {view.loanDue > 0 && (
-          <div className="row">
-            <span className="label">
-              Loan repayment
-              <span className="blurb">
-                {view.loanShortfall > 0
-                  ? `${gbpShort(view.loanShortfall)} of it can't be covered. That fails the week and is still owed.`
-                  : "Comes out before you allocate, like your giving"}
-              </span>
-            </span>
-            <span className="amount neg">−{gbpShort(view.loanPaid)}</span>
-          </div>
-        )}
         <div className="row">
           <span className="label">To allocate</span>
           <span className="amount">{gbp(view.available)}</span>

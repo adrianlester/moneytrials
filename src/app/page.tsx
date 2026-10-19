@@ -486,7 +486,7 @@ export default async function Home({
       <h2>More</h2>
       <div className="card">
         <div className="row">
-          <span className="label">Your account<span className="blurb">Ask for a loan, change your giving</span></span>
+          <span className="label">Your account<span className="blurb">Change your giving</span></span>
           <Link href="/account">Open</Link>
         </div>
         <div className="row">
