@@ -1,0 +1,204 @@
+/* Mobile first. Both players are on phones; the daily card has to be usable
+   one-handed in under 30 seconds, so tap targets are large and nothing that
+   matters sits below the fold on a small screen. */
+
+:root {
+  --bg: #12131a;
+  --surface: #1c1e28;
+  --surface-2: #252836;
+  --line: #333747;
+  --text: #f0f1f5;
+  --muted: #9aa0b4;
+  --accent: #6ee7a8;
+  --accent-ink: #09301e;
+  --warn: #f0b866;
+  --bad: #f08a8a;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+main {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 16px 16px 96px;
+}
+
+h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
+h2 { font-size: 15px; margin: 24px 0 8px; color: var(--muted); font-weight: 600;
+     text-transform: uppercase; letter-spacing: 0.06em; }
+p  { margin: 0 0 12px; }
+
+a { color: var(--accent); }
+
+.sub { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.card.big { padding: 20px; }
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.row:last-child { border-bottom: 0; }
+
+.row .label { font-weight: 600; }
+/* A blurb is the small line under a label. It was inline, so it ran straight on from
+   the label ("Making" + "Turn supplies..." read as one word). Always its own line. */
+.blurb { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; font-weight: 400; }
+.amount { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 17px; white-space: nowrap; }
+.amount.zero { color: var(--muted); }
+.amount.neg { color: var(--bad); }
+
+.locked { font-size: 11px; color: var(--warn); text-transform: uppercase;
+          letter-spacing: 0.06em; display: block; }
+
+button, .btn {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+button.primary, .btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  text-align: center;
+}
+
+button:active, .btn:active { transform: translateY(1px); }
+
+input, select, textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  margin-bottom: 12px;
+}
+
+/* A £ sitting inside the left edge of a money input. */
+.pound { position: relative; display: block; }
+.pound::before {
+  content: "£"; position: absolute; left: 14px; top: 0; height: 48px;
+  display: flex; align-items: center; color: var(--muted); pointer-events: none;
+}
+.pound input { padding-left: 30px; }
+
+label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+
+.field { margin-bottom: 4px; }
+
+.bar { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin-top: 8px; }
+.bar > span { display: block; height: 100%; background: var(--accent); }
+
+.goal-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.goal-head .n { font-weight: 600; }
+.goal-head .p { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.note { background: var(--surface-2); border-radius: 10px; padding: 12px 14px;
+        font-size: 14px; margin-bottom: 8px; }
+.note.err { border: 1px solid var(--bad); color: var(--bad); }
+
+.tag { display: inline-block; font-size: 12px; padding: 3px 9px; border-radius: 99px;
+       background: var(--surface-2); color: var(--muted); margin-right: 6px; }
+.tag.good { background: rgba(110,231,168,0.15); color: var(--accent); }
+.tag.warn { background: rgba(240,184,102,0.15); color: var(--warn); }
+
+nav.bottom {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; border-top: 1px solid var(--line);
+  background: rgba(18,19,26,0.96);
+  backdrop-filter: blur(8px);
+}
+nav.bottom a {
+  flex: 1; text-align: center; padding: 14px 4px 18px;
+  font-size: 12px; color: var(--muted); text-decoration: none; font-weight: 600;
+}
+nav.bottom a.on { color: var(--accent); }
+
+.ledger-row { display: flex; justify-content: space-between; gap: 12px;
+              padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.ledger-row .d { color: var(--muted); font-size: 12px; }
+.ledger-row .a { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.ledger-row .a.in { color: var(--accent); }
+
+.hint { color: var(--muted); font-size: 13px; margin: -4px 0 14px; }
+
+/* ---------------------------------------------------------------- evenings */
+/* Four choices per evening, five evenings on one phone screen. A <select> would
+   fit better and teach less: the whole point of §6 is that you can SEE what an
+   evening costs you next to what it earns, and pick with both in view. */
+.choices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.choice {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.choice-label { display: block; font-weight: 600; }
+
+.choice-blurb {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.choice.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.choice.on .choice-blurb { color: var(--accent-ink); opacity: 0.75; }
+
+/* 375px (an iPhone) must still get two columns — twenty stacked rows turns one
+   decision into a scroll. Only the genuinely narrow phones fall back to one. */
+@media (max-width: 330px) {
+  .choices { grid-template-columns: 1fr; }
+}

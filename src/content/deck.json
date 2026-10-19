@@ -1,0 +1,2220 @@
+{
+  "deck_id": "standard",
+  "_note": "Amounts are PENCE. 80 cards. Rules in Appendix A of money-game-spec.md. Run `npm run deck:check` after editing.",
+  "_variants": "Both players get the SAME card on the same day — the comparison view depends on it. `variants` overrides the wording for one craft, keyed on the craft chosen at season start: crochet = Robin, baking = Sam. A craft with no variant falls back to the generic text.",
+  "_grounding": "Home is Millbrook; the school bus runs Millbrook <-> Eastport. Coffee chains are beside school. Local shop is in Millbrook. Youth club is the Youth Club. Yarn is from The Wool Shop on High Street, Eastport. Robin: crochet, singing lessons, Brigade. Sam: baking (fancy, heavily decorated), violin lessons, kart games. Robin rollerblades at the roller rink; Sam skates at the ice rink. Lessons are parent-paid - only the extras fall to them.",
+  "_todo": "Real family birthday cards were removed from this public copy. Add your own, with a `season_window`, to taste.",
+  "cards": [
+    {
+      "id": "overtime-saturday",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Overtime Saturday",
+      "body": "Your manager texts: someone's called in sick and there's a full extra shift going Saturday. It's £30. It's also the afternoon everyone else is going to the cinema.",
+      "options": [
+        {
+          "id": "shift",
+          "label": "Take the shift",
+          "income": 3000,
+          "outcome": "You work the shift. The photos go up about four."
+        },
+        {
+          "id": "cinema",
+          "label": "Go to the cinema",
+          "spend": {
+            "enjoyment": 1200
+          },
+          "outcome": "You go. It's a good afternoon."
+        }
+      ]
+    },
+    {
+      "id": "extra-hours-offered",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Two evenings going",
+      "body": "There are two evening shifts available this week. £22 each. You have homework due Friday.",
+      "options": [
+        {
+          "id": "both",
+          "label": "Take both (£44)",
+          "income": 4400,
+          "outcome": "Taken. The homework happens on Thursday night."
+        },
+        {
+          "id": "one",
+          "label": "Take one (£22)",
+          "income": 2200
+        },
+        {
+          "id": "none",
+          "label": "Neither",
+          "outcome": "Neither. The homework is actually good."
+        }
+      ]
+    },
+    {
+      "id": "tips-split",
+      "kind": "event",
+      "weight": 2,
+      "title": "Tips split",
+      "body": "The jar gets split at the end of the month and your share is £13.",
+      "options": [
+        {
+          "id": "take",
+          "label": "Take it",
+          "income": 1300
+        }
+      ]
+    },
+    {
+      "id": "shop-closed",
+      "kind": "event",
+      "weight": 1,
+      "title": "Burst pipe",
+      "body": "The shop's shut Saturday — a pipe went in the back. No shift, no pay.",
+      "options": [
+        {
+          "id": "ok",
+          "label": "Nothing you can do",
+          "outcome": "Nothing you can do. It's a lean week."
+        }
+      ]
+    },
+    {
+      "id": "found-fiver",
+      "kind": "event",
+      "weight": 1,
+      "title": "A fiver in a coat",
+      "body": "Last winter's coat, inside pocket. £5 you had entirely forgotten about.",
+      "options": [
+        {
+          "id": "take",
+          "label": "Yours now",
+          "income": 500
+        }
+      ]
+    },
+    {
+      "id": "someone-wants-to-buy",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Someone wants to buy one",
+      "body": "Someone has seen something you made and offers £18 for one of their own.",
+      "options": [
+        {
+          "id": "sell",
+          "label": "Say yes (£18)",
+          "income": 1800
+        },
+        {
+          "id": "no",
+          "label": "Say you haven't time",
+          "outcome": "You say you haven't time. Which is true, this week."
+        }
+      ],
+      "variants": {
+        "crochet": {
+          "title": "Can you make me one",
+          "body": "Someone at church has seen the last thing you made and asks if you'd do one for their niece. They offer £18. It's maybe four evenings of work and you'd need more yarn.",
+          "options": [
+            {
+              "id": "sell",
+              "label": "Say yes (£18)",
+              "income": 1800,
+              "outcome": "Agreed. Four evenings of it, and the yarn comes out of your own money first."
+            },
+            {
+              "id": "no",
+              "label": "Say you haven't time",
+              "outcome": "You say you haven't time. Which is true, this week."
+            }
+          ]
+        },
+        "baking": {
+          "title": "Could you do a cake",
+          "body": "Someone at church asks if you'd do a birthday cake — two tiers, the full decorating. They offer £18. The ingredients and the colours alone are most of a tenner.",
+          "options": [
+            {
+              "id": "sell",
+              "label": "Say yes (£18)",
+              "income": 1800,
+              "outcome": "Agreed. You find out on Thursday what £18 actually covers."
+            },
+            {
+              "id": "no",
+              "label": "Say you haven't time",
+              "outcome": "You say you haven't time. Which is true, this week."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "phone-bill",
+      "kind": "event",
+      "weight": 4,
+      "title": "SIM payment due",
+      "body": "£11 out for the SIM. It goes whether you look at it or not.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "It goes out",
+          "obligation": 1100
+        }
+      ]
+    },
+    {
+      "id": "bus-pass-lost",
+      "kind": "event",
+      "weight": 2,
+      "title": "Bus pass gone",
+      "body": "It's not in your coat, not in your bag, not in your room — and the Millbrook bus into Eastport is at ten past eight.",
+      "options": [
+        {
+          "id": "replace",
+          "label": "Buy a replacement (£14)",
+          "obligation": 1400,
+          "outcome": "Replaced. Keep it somewhere sensible this time."
+        },
+        {
+          "id": "daily",
+          "label": "Pay on the bus for now (£10.50)",
+          "obligation": 1050,
+          "outcome": "Three days of fares. It turns up on Thursday, in the coat."
+        }
+      ]
+    },
+    {
+      "id": "youth-weekend-balance",
+      "kind": "event",
+      "weight": 2,
+      "title": "Youth Club weekend — balance due",
+      "body": "The balance for the youth weekend is due Friday. £25, and the form has been in your bag for a fortnight.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "Pay it",
+          "obligation": 2500
+        },
+        {
+          "id": "drop",
+          "label": "Don't go",
+          "outcome": "You don't go. That's decided now, and everyone finds out on Sunday."
+        }
+      ]
+    },
+    {
+      "id": "broken-screen",
+      "kind": "event",
+      "weight": 2,
+      "title": "Screen",
+      "body": "It went down the concrete steps face first. It still works, but it's spidered corner to corner.",
+      "options": [
+        {
+          "id": "fix",
+          "label": "Get it repaired (£45)",
+          "obligation": 4500,
+          "outcome": "Repaired. That hurt."
+        },
+        {
+          "id": "live",
+          "label": "Live with it",
+          "outcome": "You live with it. It catches your thumb."
+        }
+      ]
+    },
+    {
+      "id": "subscription-rise",
+      "kind": "event",
+      "weight": 2,
+      "title": "Price change email",
+      "body": "The subscription is going from £5.99 to £6.99 next month. The email calls it an update.",
+      "options": [
+        {
+          "id": "keep",
+          "label": "Keep it",
+          "obligation": 699
+        },
+        {
+          "id": "cancel",
+          "label": "Cancel it",
+          "outcome": "Cancelled. You'll find out this week whether you miss it."
+        }
+      ]
+    },
+    {
+      "id": "lesson-extra",
+      "kind": "event",
+      "weight": 2,
+      "title": "The lesson is paid for. This isn't.",
+      "body": "Your lessons are covered at home. The extra that's come up this term isn't — £16.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "Pay it (£16)",
+          "obligation": 1600
+        },
+        {
+          "id": "defer",
+          "label": "Put it off",
+          "outcome": "You put it off. Nobody makes you feel bad about it, which is somehow worse."
+        }
+      ],
+      "variants": {
+        "crochet": {
+          "title": "Exam entry",
+          "body": "Your singing lessons are paid for at home. The exam entry fee is not, and it's £16, due before half term.",
+          "options": [
+            {
+              "id": "pay",
+              "label": "Pay the entry fee (£16)",
+              "obligation": 1600
+            },
+            {
+              "id": "defer",
+              "label": "Sit it next session instead",
+              "outcome": "You put it off a term. Nobody makes you feel bad about it, which is somehow worse."
+            }
+          ]
+        },
+        "baking": {
+          "title": "Strings",
+          "body": "Your violin lessons are paid for at home. A string went on Tuesday and a replacement set is £16 — you can't do this week's lesson without it.",
+          "options": [
+            {
+              "id": "pay",
+              "label": "Buy the strings (£16)",
+              "obligation": 1600
+            },
+            {
+              "id": "defer",
+              "label": "Borrow a set for now",
+              "outcome": "You borrow a set. You will have to replace them, and you both know it."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "brigade-or-comp-travel",
+      "kind": "event",
+      "weight": 2,
+      "title": "Getting there",
+      "body": "There's a thing on Saturday you've committed to, and it's not somewhere the bus goes. £6 towards fuel for whoever's driving.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "Chip in (£6)",
+          "obligation": 600
+        }
+      ],
+      "variants": {
+        "crochet": {
+          "title": "Brigade competition — Saturday",
+          "body": "The competition is Saturday and it's an away one, so there's an early start, extra rehearsals this week, and £6 towards the minibus.",
+          "options": [
+            {
+              "id": "pay",
+              "label": "Chip in for the minibus (£6)",
+              "obligation": 600,
+              "outcome": "Paid. The rehearsals eat the week whether you like it or not."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "lunch-in-school",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Lunch, again",
+      "body": "You forgot to make anything. You can get something in school for about £3.20, or get through the afternoon on what's in your bag.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy it in school (£3.20)",
+          "spend": {
+            "enjoyment": 320
+          }
+        },
+        {
+          "id": "skip",
+          "label": "Ride it out",
+          "outcome": "A cereal bar and a long afternoon. Free, though."
+        }
+      ]
+    },
+    {
+      "id": "starbucks-round",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Starbucks after school",
+      "body": "Four of you head round to Starbucks and it has landed on you to get them in. £14 for the round, or £3.75 for your own.",
+      "options": [
+        {
+          "id": "round",
+          "label": "Get the round (£14)",
+          "spend": {
+            "enjoyment": 1400
+          },
+          "outcome": "You get the round. It's noted."
+        },
+        {
+          "id": "own",
+          "label": "Just yours (£3.75)",
+          "spend": {
+            "enjoyment": 375
+          },
+          "outcome": "You get your own. It's also noted."
+        }
+      ]
+    },
+    {
+      "id": "mcdonalds-after-school",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Everyone's going to McDonald's",
+      "body": "Straight out the gate and round the corner. You're not hungry, particularly, but that's not really what it's about.",
+      "options": [
+        {
+          "id": "meal",
+          "label": "Get something (£6)",
+          "spend": {
+            "enjoyment": 600
+          }
+        },
+        {
+          "id": "drink",
+          "label": "Just a drink (£1.50)",
+          "spend": {
+            "enjoyment": 150
+          },
+          "outcome": "You sit in with a drink. Nobody notices or cares."
+        },
+        {
+          "id": "home",
+          "label": "Get the bus home",
+          "outcome": "You get the bus home. You're back before four."
+        }
+      ]
+    },
+    {
+      "id": "bill-splits-evenly",
+      "kind": "event",
+      "weight": 2,
+      "title": "The bill splits evenly",
+      "body": "Six of you ate, you had the cheapest thing on the menu, and the table decides to split it evenly. Your share is £16.",
+      "options": [
+        {
+          "id": "split",
+          "label": "Pay the even split (£16)",
+          "spend": {
+            "enjoyment": 1600
+          }
+        },
+        {
+          "id": "say",
+          "label": "Say what you actually had (£9)",
+          "spend": {
+            "enjoyment": 900
+          },
+          "outcome": "You say it. It's slightly awkward and completely fine."
+        }
+      ]
+    },
+    {
+      "id": "cinema-friday",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Everyone's going",
+      "body": "Cinema Friday. £9.50 in, and nobody goes to the cinema without getting something.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Go, with snacks (£15)",
+          "spend": {
+            "enjoyment": 1500
+          }
+        },
+        {
+          "id": "ticket",
+          "label": "Go, eat before (£9.50)",
+          "spend": {
+            "enjoyment": 950
+          }
+        },
+        {
+          "id": "skip",
+          "label": "Don't go",
+          "outcome": "You stay in. It'll be streaming in four months."
+        }
+      ]
+    },
+    {
+      "id": "skating-saturday",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Saturday afternoon",
+      "body": "A few of you are going out Saturday afternoon. It's £11 in, plus the bus.",
+      "options": [
+        {
+          "id": "go",
+          "label": "Go (£13.50)",
+          "spend": {
+            "enjoyment": 1350
+          }
+        },
+        {
+          "id": "skip",
+          "label": "Give it a miss",
+          "outcome": "You give it a miss. It's on again in a fortnight."
+        }
+      ],
+      "variants": {
+        "baking": {
+          "title": "Ice rink, Saturday",
+          "body": "A few of you are going to Dundonald on Saturday afternoon. £11 in with skate hire, plus £2.50 on the bus.",
+          "options": [
+            {
+              "id": "go",
+              "label": "Go (£13.50)",
+              "spend": {
+                "enjoyment": 1350
+              },
+              "outcome": "Two and a half hours and you can't feel your ankles."
+            },
+            {
+              "id": "skip",
+              "label": "Give it a miss",
+              "outcome": "You give it a miss. It's on again in a fortnight."
+            }
+          ]
+        },
+        "crochet": {
+          "title": "the roller rink, Saturday",
+          "body": "A few of you are going to the roller rink on Saturday afternoon. £11 for the session, plus £2.50 on the bus.",
+          "options": [
+            {
+              "id": "go",
+              "label": "Go (£13.50)",
+              "spend": {
+                "enjoyment": 1350
+              },
+              "outcome": "Two hours and one properly impressive fall."
+            },
+            {
+              "id": "skip",
+              "label": "Give it a miss",
+              "outcome": "You give it a miss. It's on again in a fortnight."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "birthday-gift",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Someone's birthday",
+      "body": "It's a friend's birthday on Thursday and you've been invited to the thing. A present is expected, roughly.",
+      "options": [
+        {
+          "id": "good",
+          "label": "Something decent (£20)",
+          "spend": {
+            "enjoyment": 2000
+          }
+        },
+        {
+          "id": "small",
+          "label": "Something small (£7)",
+          "spend": {
+            "enjoyment": 700
+          }
+        },
+        {
+          "id": "made",
+          "label": "Make something",
+          "outcome": "You make something. It goes down better than the £20 would have."
+        }
+      ]
+    },
+    {
+      "id": "sister-loan",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Can you lend me a tenner",
+      "body": "Your sister's short and asks for £10 until Saturday. She has form, both ways.",
+      "options": [
+        {
+          "id": "lend",
+          "label": "Lend it",
+          "spend": {
+            "enjoyment": 1000
+          },
+          "outcome": "Lent. She says Saturday."
+        },
+        {
+          "id": "no",
+          "label": "Say no",
+          "outcome": "You say no. It's fine, mostly."
+        }
+      ]
+    },
+    {
+      "id": "friend-short",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "She's short at the till",
+      "body": "You're both at the till in the shop in Millbrook and she's £4 short. The queue is behind you.",
+      "options": [
+        {
+          "id": "cover",
+          "label": "Cover it (£4)",
+          "spend": {
+            "enjoyment": 400
+          },
+          "outcome": "Covered. She'll get you back or she won't."
+        },
+        {
+          "id": "wait",
+          "label": "Let her put something back",
+          "outcome": "She puts the second thing back. Nobody says anything."
+        }
+      ]
+    },
+    {
+      "id": "missed-last-bus",
+      "kind": "event",
+      "weight": 2,
+      "title": "Missed the last bus",
+      "body": "You're in Eastport, it's twenty past ten, and the last one to Millbrook went at ten.",
+      "options": [
+        {
+          "id": "taxi",
+          "label": "Split a taxi (£8)",
+          "spend": {
+            "enjoyment": 800
+          }
+        },
+        {
+          "id": "lift",
+          "label": "Ring home for a lift",
+          "outcome": "You get a lift. There is a conversation in the car."
+        }
+      ]
+    },
+    {
+      "id": "trainers-sale",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "The trainers, reduced",
+      "body": "The £75 ones are £52 until Sunday. Your current ones have another few months in them, probably.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy them (£52)",
+          "spend": {
+            "goals": 5200
+          },
+          "outcome": "Bought. That's a real dent, and they're yours."
+        },
+        {
+          "id": "wait",
+          "label": "Leave it",
+          "outcome": "You leave it. They're £75 again on Monday."
+        }
+      ]
+    },
+    {
+      "id": "concert-presale",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Presale, 9am Thursday",
+      "body": "£48 a ticket and they will be gone by five past. Everyone is going. It's in March.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy a ticket (£48)",
+          "spend": {
+            "goals": 4800
+          },
+          "outcome": "You're in. That is a lot of money in one go."
+        },
+        {
+          "id": "skip",
+          "label": "Sit this one out",
+          "outcome": "You sit it out. The chat is unbearable for two days."
+        }
+      ]
+    },
+    {
+      "id": "charity-shop-find",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Charity shop, High Street",
+      "body": "A jacket that is exactly right, £8, and it will not be there tomorrow.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy it (£8)",
+          "spend": {
+            "enjoyment": 800
+          },
+          "outcome": "Bought. Genuinely good."
+        },
+        {
+          "id": "leave",
+          "label": "Leave it",
+          "outcome": "You leave it. You think about it on Thursday."
+        }
+      ]
+    },
+    {
+      "id": "the-thing-you-keep-looking-at",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "The thing you keep looking at",
+      "body": "£9.99. You've opened the page four times this week.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy it (£9.99)",
+          "spend": {
+            "enjoyment": 999
+          }
+        },
+        {
+          "id": "close",
+          "label": "Close the tab",
+          "outcome": "You close the tab. You open it again on Sunday."
+        }
+      ],
+      "variants": {
+        "baking": {
+          "title": "Kart Rush — the season pass",
+          "body": "New season, £9.99 for the pass. You've opened it four times this week and everyone you play with has already bought it.",
+          "options": [
+            {
+              "id": "buy",
+              "label": "Buy the pass (£9.99)",
+              "spend": {
+                "enjoyment": 999
+              },
+              "outcome": "Bought. It's good for about six weeks."
+            },
+            {
+              "id": "close",
+              "label": "Close the tab",
+              "outcome": "You close the tab. You open it again on Sunday."
+            }
+          ]
+        },
+        "crochet": {
+          "title": "The hook set",
+          "body": "The proper set with the soft handles, £9.99. Yours are fine. Yours also give you a sore hand after an hour.",
+          "options": [
+            {
+              "id": "buy",
+              "label": "Buy the set (£9.99)",
+              "spend": {
+                "enjoyment": 999
+              },
+              "outcome": "Bought. Your hand stops aching by Thursday."
+            },
+            {
+              "id": "close",
+              "label": "Close the tab",
+              "outcome": "You close the tab. You open it again on Sunday."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "street-collection",
+      "kind": "event",
+      "weight": 3,
+      "title": "Collection tin, High Street",
+      "body": "Someone's standing outside with a tin as you're walking past. You've got change on you.",
+      "options": [
+        {
+          "id": "five",
+          "label": "£5",
+          "spend": {
+            "giving_reserve": 500
+          }
+        },
+        {
+          "id": "two",
+          "label": "£2",
+          "spend": {
+            "giving_reserve": 200
+          }
+        },
+        {
+          "id": "walk",
+          "label": "Keep walking",
+          "outcome": "You keep walking."
+        }
+      ]
+    },
+    {
+      "id": "coffee-morning",
+      "kind": "event",
+      "weight": 2,
+      "title": "Coffee morning at church",
+      "body": "Saturday morning, tea and traybakes, all of it going to the appeal. Nobody's counting what anyone puts in.",
+      "options": [
+        {
+          "id": "ten",
+          "label": "£10",
+          "spend": {
+            "giving_reserve": 1000
+          }
+        },
+        {
+          "id": "three",
+          "label": "£3",
+          "spend": {
+            "giving_reserve": 300
+          }
+        },
+        {
+          "id": "none",
+          "label": "Just have the tea",
+          "outcome": "You just have the tea."
+        }
+      ]
+    },
+    {
+      "id": "justgiving-link",
+      "kind": "event",
+      "weight": 2,
+      "title": "A JustGiving link",
+      "body": "Someone from your year is doing a sponsored silence. The link is in the group chat and it's on 11%.",
+      "options": [
+        {
+          "id": "ten",
+          "label": "£10",
+          "spend": {
+            "giving_reserve": 1000
+          }
+        },
+        {
+          "id": "three",
+          "label": "£3",
+          "spend": {
+            "giving_reserve": 300
+          }
+        },
+        {
+          "id": "none",
+          "label": "Leave it",
+          "outcome": "You leave it."
+        }
+      ]
+    },
+    {
+      "id": "harvest-appeal",
+      "kind": "event",
+      "weight": 2,
+      "title": "Harvest appeal",
+      "body": "The harvest collection is this Sunday and it's been announced three weeks running.",
+      "options": [
+        {
+          "id": "fifteen",
+          "label": "£15",
+          "spend": {
+            "giving_reserve": 1500
+          }
+        },
+        {
+          "id": "five",
+          "label": "£5",
+          "spend": {
+            "giving_reserve": 500
+          }
+        },
+        {
+          "id": "none",
+          "label": "Nothing this time",
+          "outcome": "Nothing this time."
+        }
+      ]
+    },
+    {
+      "id": "supplies-run-low",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "You're out of supplies",
+      "body": "You can't make anything else until you buy more. £12 for enough to do a batch.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy a batch (£12)",
+          "spend": {
+            "goals": 1200
+          },
+          "outcome": "Bought. It's supplies, not stock — it doesn't sell itself.",
+          "grantsSupplies": 1
+        },
+        {
+          "id": "skip",
+          "label": "Not this week",
+          "outcome": "Not this week."
+        }
+      ],
+      "variants": {
+        "crochet": {
+          "title": "The Wool Shop have your shade in",
+          "body": "High Street, and they're clearing the shade you actually wanted. £12 for enough to do a batch — and it won't be there next week.",
+          "options": [
+            {
+              "id": "buy",
+              "label": "Buy it (£12)",
+              "spend": {
+                "goals": 1200
+              },
+              "outcome": "Bought. It's yarn, not finished things — it doesn't sell itself.",
+              "grantsSupplies": 1
+            },
+            {
+              "id": "skip",
+              "label": "Not this week",
+              "outcome": "Not this week. You think about it on the bus home."
+            }
+          ]
+        },
+        "baking": {
+          "title": "Out of everything that makes it look good",
+          "body": "You've flour and eggs. You've no colours, no sprinkles, and one piping nozzle that's split. £8 restocks the lot.",
+          "options": [
+            {
+              "id": "buy",
+              "label": "Restock (£8)",
+              "spend": {
+                "goals": 800
+              },
+              "outcome": "Bought. It's ingredients, not cakes — it doesn't sell itself.",
+              "grantsSupplies": 1
+            },
+            {
+              "id": "skip",
+              "label": "Not this week",
+              "outcome": "Not this week. Everything you make is beige."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "market-stall-fee",
+      "kind": "event",
+      "weight": 1,
+      "title": "Stall fee",
+      "body": "The Christmas market wants £10 for a half table. It's on Saturday week, so you'd need stock ready.",
+      "options": [
+        {
+          "id": "book",
+          "label": "Book the half table (£10)",
+          "spend": {
+            "goals": 1000
+          },
+          "outcome": "Booked. Paid before a single thing has sold.",
+          "extraMarket": {
+            "daysAhead": 7
+          }
+        },
+        {
+          "id": "skip",
+          "label": "Not this year",
+          "outcome": "Not this year."
+        }
+      ]
+    },
+    {
+      "id": "perfume-or-dupe",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "The perfume, and the one that's nearly it",
+      "body": "The one you actually want is £38. There's a dupe of it for £9 that people say is close.",
+      "options": [
+        {
+          "id": "real",
+          "label": "The real one (£38)",
+          "spend": {
+            "goals": 3800
+          },
+          "outcome": "Bought. It lasts months, and it's the one."
+        },
+        {
+          "id": "dupe",
+          "label": "The dupe (£9)",
+          "spend": {
+            "enjoyment": 900
+          },
+          "outcome": "It is close. It also goes off you by about two."
+        },
+        {
+          "id": "neither",
+          "label": "Neither",
+          "outcome": "Neither. You still have most of the last one."
+        }
+      ]
+    },
+    {
+      "id": "hair-clips",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "The clips keep disappearing",
+      "body": "You're down to one good claw clip and two that don't hold. £14 for a proper set, or £3.50 for a multipack that'll also go missing.",
+      "options": [
+        {
+          "id": "proper",
+          "label": "The proper set (£14)",
+          "spend": {
+            "enjoyment": 1400
+          }
+        },
+        {
+          "id": "cheap",
+          "label": "The multipack (£3.50)",
+          "spend": {
+            "enjoyment": 350
+          },
+          "outcome": "Bought. Three of them are gone inside a fortnight."
+        },
+        {
+          "id": "none",
+          "label": "Manage with what you have",
+          "outcome": "You manage. Mostly."
+        }
+      ],
+      "variants": {
+        "baking": {
+          "title": "The hair stuff, again",
+          "body": "Clips, claws, the scrunchies that actually hold. You had plenty in August and you can find four. £14 for the good set or £3.50 for the multipack that'll also vanish.",
+          "options": [
+            {
+              "id": "proper",
+              "label": "The proper set (£14)",
+              "spend": {
+                "enjoyment": 1400
+              },
+              "outcome": "Bought. These ones you will actually keep track of."
+            },
+            {
+              "id": "cheap",
+              "label": "The multipack (£3.50)",
+              "spend": {
+                "enjoyment": 350
+              },
+              "outcome": "Bought. Three of them are gone inside a fortnight."
+            },
+            {
+              "id": "none",
+              "label": "Manage with what you have",
+              "outcome": "You manage. Mostly."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "earrings",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "The earrings that go with everything",
+      "body": "£16, and you can see exactly where they'd work. You already own earrings.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy them (£16)",
+          "spend": {
+            "enjoyment": 1600
+          }
+        },
+        {
+          "id": "cheaper",
+          "label": "Find a cheaper pair (£5)",
+          "spend": {
+            "enjoyment": 500
+          },
+          "outcome": "Close enough. One of them turns your ear green by Thursday."
+        },
+        {
+          "id": "leave",
+          "label": "Leave them",
+          "outcome": "You leave them. They're still there next week, which proves nothing either way."
+        }
+      ]
+    },
+    {
+      "id": "the-viral-one",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "The one everyone's on about",
+      "body": "£17. The one you already use costs £5 and has never once let you down.",
+      "options": [
+        {
+          "id": "try",
+          "label": "Try it (£17)",
+          "spend": {
+            "enjoyment": 1700
+          },
+          "outcome": "Bought. You'll know in three weeks whether it was the thing or the lighting."
+        },
+        {
+          "id": "stick",
+          "label": "Stick with yours (£5)",
+          "spend": {
+            "enjoyment": 500
+          }
+        },
+        {
+          "id": "neither",
+          "label": "Neither this month",
+          "outcome": "Neither. You've enough to be going on with."
+        }
+      ]
+    },
+    {
+      "id": "ran-out-of-the-basic",
+      "kind": "event",
+      "weight": 2,
+      "title": "You've run out of the boring one",
+      "body": "Not the exciting thing — the one you use every day and never think about. £6.50.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Replace it (£6.50)",
+          "spend": {
+            "enjoyment": 650
+          }
+        },
+        {
+          "id": "borrow",
+          "label": "Use your sister's for now",
+          "outcome": "You use your sister's. This will come up again, and she will remember."
+        }
+      ]
+    },
+    {
+      "id": "bus-both-ways",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Bus or legs",
+      "body": "You're in Eastport and you're done for the day. The bus home to Millbrook is £1.75 each way. You could walk one leg of it — it's about forty minutes, and you'd get home when you get home.",
+      "options": [
+        {
+          "id": "bus",
+          "label": "Get the bus both ways (£3.50)",
+          "spend": {
+            "bills": 350
+          },
+          "outcome": "Home in ten minutes with the evening still in front of you."
+        },
+        {
+          "id": "walk",
+          "label": "Walk one leg, keep the £1.75",
+          "spend": {
+            "bills": 175
+          },
+          "takesEvening": true,
+          "outcome": "You keep £1.75. The forty minutes came out of tonight."
+        }
+      ]
+    },
+    {
+      "id": "pre-cut-or-make",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "The shortcut costs £9",
+      "body": "You could buy the ready-made version for £9 and be finished tonight, or do it yourself for nothing and lose an evening to it.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy the ready-made one (£9)",
+          "spend": {
+            "enjoyment": 900
+          },
+          "outcome": "Done, and the evening is yours."
+        },
+        {
+          "id": "make",
+          "label": "Make it yourself",
+          "takesEvening": true,
+          "outcome": "It costs nothing. It costs an evening."
+        }
+      ],
+      "variants": {
+        "crochet": {
+          "title": "Wound or unwound",
+          "body": "The Wool Shop on High Street has the same yarn in ready-wound cakes for £9, or in hanks for nothing extra — but a hank has to be wound before you can use a metre of it, and that's your evening gone.",
+          "options": [
+            {
+              "id": "buy",
+              "label": "Buy it ready-wound (£9)",
+              "spend": {
+                "enjoyment": 900
+              },
+              "outcome": "You can start tonight. That's what the £9 bought."
+            },
+            {
+              "id": "make",
+              "label": "Wind the hanks yourself",
+              "takesEvening": true,
+              "outcome": "Free, and it takes the whole evening, and your arms ache."
+            }
+          ]
+        },
+        "baking": {
+          "title": "Ready-roll or make it",
+          "body": "The ready-to-roll icing is £9 for enough to cover the whole thing. Making it from scratch costs almost nothing and takes an evening on its own, before you've decorated anything.",
+          "options": [
+            {
+              "id": "buy",
+              "label": "Buy the ready-roll (£9)",
+              "spend": {
+                "enjoyment": 900
+              },
+              "outcome": "Straight to the decorating. That's what the £9 bought."
+            },
+            {
+              "id": "make",
+              "label": "Make it from scratch",
+              "takesEvening": true,
+              "outcome": "Nearly free, and the evening went on icing you can't even see yet."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "express-postage",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Next day or Thursday",
+      "body": "What you've ordered can come next day for £5.95, or free and arrive Thursday. Thursday means starting later and working an evening you hadn't planned on.",
+      "options": [
+        {
+          "id": "express",
+          "label": "Pay for next day (£5.95)",
+          "spend": {
+            "enjoyment": 595
+          },
+          "outcome": "It lands tomorrow. You start when you meant to."
+        },
+        {
+          "id": "slow",
+          "label": "Take the free one",
+          "takesEvening": true,
+          "outcome": "Free postage, and an evening later in the week goes on catching up."
+        }
+      ]
+    },
+    {
+      "id": "greggs-or-packed",
+      "kind": "dilemma",
+      "weight": 3,
+      "title": "Greggs or the packed one",
+      "body": "Everyone's going to Greggs. It's £3.40 for the meal deal. There is a perfectly good lunch in your bag that you made last night.",
+      "options": [
+        {
+          "id": "greggs",
+          "label": "Go with them (£3.40)",
+          "spend": {
+            "enjoyment": 340
+          },
+          "outcome": "£3.40. You were going to eat either way."
+        },
+        {
+          "id": "packed",
+          "label": "Eat what you brought",
+          "outcome": "You eat what you brought. They go anyway."
+        }
+      ]
+    },
+    {
+      "id": "lift-or-late-bus",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "The late bus",
+      "body": "You're out and the last bus that gets you home at a reasonable hour goes in twenty minutes. Stay on and you're walking part of it in the dark, or getting collected and owing someone a favour.",
+      "options": [
+        {
+          "id": "leave",
+          "label": "Leave now and get the bus (£1.75)",
+          "spend": {
+            "bills": 175
+          },
+          "outcome": "Home early. You missed the end of it."
+        },
+        {
+          "id": "stay",
+          "label": "Stay to the end",
+          "takesEvening": true,
+          "outcome": "You stayed. It cost you tomorrow evening putting right what you didn't do tonight."
+        }
+      ]
+    },
+    {
+      "id": "music-sub-or-ads",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Or listen to the ads",
+      "body": "The music subscription is £5.99 a month. The free one is the same music with an advert every four songs.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "Pay for it (£5.99/mo)",
+          "obligation": 599,
+          "outcome": "It's a bill now. It comes every month whether you thought about it or not."
+        },
+        {
+          "id": "ads",
+          "label": "Put up with the ads",
+          "outcome": "You put up with the ads. Roughly fifteen of them an hour."
+        }
+      ]
+    },
+    {
+      "id": "fix-or-replace",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Fix it or replace it",
+      "body": "It's broken. A new one is £16. You could probably mend the old one — you've watched someone do it — but that's an evening and it might not work.",
+      "options": [
+        {
+          "id": "replace",
+          "label": "Buy a new one (£16)",
+          "spend": {
+            "goals": 1600
+          },
+          "outcome": "New one. Sorted in four minutes."
+        },
+        {
+          "id": "mend",
+          "label": "Try to mend it",
+          "takesEvening": true,
+          "outcome": "An evening on it. You'll know by the end whether that was £16 well saved."
+        }
+      ]
+    },
+    {
+      "id": "batch-or-buy-daily",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Five lunches at once",
+      "body": "An evening now makes the whole week's lunches for about £6 of shopping. Or you buy at school, around £3 a day, and keep the evening.",
+      "options": [
+        {
+          "id": "batch",
+          "label": "Make the week's lunches (£6)",
+          "spend": {
+            "bills": 600
+          },
+          "takesEvening": true,
+          "outcome": "£6 and one evening covers all five days."
+        },
+        {
+          "id": "daily",
+          "label": "Buy them at school (£15)",
+          "spend": {
+            "enjoyment": 1500
+          },
+          "outcome": "£15 across the week, and five evenings you didn't spend on it."
+        }
+      ]
+    },
+    {
+      "id": "school-trip-money",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Spending money for the trip",
+      "body": "The school trip is paid for. The letter says to bring spending money and suggests £10. Half your year will bring £20.",
+      "options": [
+        {
+          "id": "twenty",
+          "label": "Take £20",
+          "spend": {
+            "enjoyment": 2000
+          },
+          "outcome": "You take £20. The gift shop does the rest."
+        },
+        {
+          "id": "ten",
+          "label": "Take £10",
+          "spend": {
+            "enjoyment": 1000
+          },
+          "outcome": "You take what the letter said."
+        },
+        {
+          "id": "lunch",
+          "label": "Take £4 for a drink",
+          "spend": {
+            "enjoyment": 400
+          },
+          "outcome": "You take £4. You spend £4."
+        }
+      ]
+    },
+    {
+      "id": "teacher-whip-round",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "A card and something for Miss",
+      "body": "She's leaving at the end of the week. Someone is going round the class with an envelope.",
+      "options": [
+        {
+          "id": "five",
+          "label": "Put in £5",
+          "spend": {
+            "enjoyment": 500
+          },
+          "outcome": "£5 in the envelope."
+        },
+        {
+          "id": "two",
+          "label": "Put in £2",
+          "spend": {
+            "enjoyment": 200
+          },
+          "outcome": "£2 in the envelope. Nobody looks at the amounts."
+        },
+        {
+          "id": "sign",
+          "label": "Just sign the card",
+          "outcome": "You sign the card."
+        }
+      ]
+    },
+    {
+      "id": "bulk-or-single",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "The bigger bag is cheaper",
+      "body": "The big pack is £30 and works out much cheaper per use. The small one is £12. You'd have to part with the £30 today.",
+      "options": [
+        {
+          "id": "big",
+          "label": "Buy the big pack (£30)",
+          "spend": {
+            "goals": 3000
+          },
+          "outcome": "The big pack. You are set for a good while.",
+          "grantsSupplies": 3
+        },
+        {
+          "id": "small",
+          "label": "Buy the small one (£12)",
+          "spend": {
+            "goals": 1200
+          },
+          "outcome": "The small one. You'll be back for more.",
+          "grantsSupplies": 1
+        }
+      ],
+      "variants": {
+        "crochet": {
+          "title": "Cotton by the cone",
+          "body": "The Wool Shop have a big cone of cotton at £30 that works out at about half the price of the balls. The balls are £12 for enough to do a batch.",
+          "options": [
+            {
+              "id": "big",
+              "label": "Buy the cone (£30)",
+              "spend": {
+                "goals": 3000
+              },
+              "outcome": "The cone. You won't have to think about yarn for a while.",
+              "grantsSupplies": 3
+            },
+            {
+              "id": "small",
+              "label": "Buy the balls (£12)",
+              "spend": {
+                "goals": 1200
+              },
+              "outcome": "The balls. You'll be back for more.",
+              "grantsSupplies": 1
+            }
+          ]
+        },
+        "baking": {
+          "title": "The 5kg bag",
+          "body": "Good chocolate, in a 5kg bag, is £20 and works out much cheaper per bake. A small bar is £8 for a batch's worth.",
+          "options": [
+            {
+              "id": "big",
+              "label": "Buy the 5kg bag (£20)",
+              "spend": {
+                "goals": 2000
+              },
+              "outcome": "The big bag. It takes up half a shelf.",
+              "grantsSupplies": 3
+            },
+            {
+              "id": "small",
+              "label": "Buy the small bar (£8)",
+              "spend": {
+                "goals": 800
+              },
+              "outcome": "The small one. You'll be back for more.",
+              "grantsSupplies": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "in-app-purchase",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "£4.99",
+      "body": "It's a one-off. It unlocks the thing you've been going without.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy it (£4.99)",
+          "spend": {
+            "enjoyment": 499
+          },
+          "outcome": "Bought. It's a good thing to have."
+        },
+        {
+          "id": "skip",
+          "label": "Leave it",
+          "outcome": "You leave it. It'll still be there."
+        }
+      ],
+      "variants": {
+        "crochet": {
+          "title": "The pattern",
+          "body": "A pattern for the thing you've wanted to make since the summer. It's £4.99 as a PDF. You've seen the same thing done for free, badly.",
+          "options": [
+            {
+              "id": "buy",
+              "label": "Buy the pattern (£4.99)",
+              "spend": {
+                "enjoyment": 499
+              },
+              "outcome": "Bought. The instructions make sense."
+            },
+            {
+              "id": "skip",
+              "label": "Work it out yourself",
+              "outcome": "You work it out yourself. It takes longer."
+            }
+          ]
+        },
+        "baking": {
+          "title": "The skin",
+          "body": "A new kart skin on Kart Rush. £4.99. It makes no difference to how you drive.",
+          "options": [
+            {
+              "id": "buy",
+              "label": "Buy it (£4.99)",
+              "spend": {
+                "enjoyment": 499
+              },
+              "outcome": "Bought. You look good for about a week."
+            },
+            {
+              "id": "skip",
+              "label": "Keep the default",
+              "outcome": "You keep the default."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "youth-pizza-night",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Youth Club pizza night",
+      "body": "Pizza at Youth Club this Friday. £5 for the night, and it's a long one.",
+      "options": [
+        {
+          "id": "pizza",
+          "label": "Pay for pizza (£5)",
+          "spend": {
+            "enjoyment": 500
+          },
+          "outcome": "£5 and a slice and a half."
+        },
+        {
+          "id": "bring",
+          "label": "Bring your own (about £2)",
+          "spend": {
+            "enjoyment": 200
+          },
+          "outcome": "You bring your own. People look at it, and then forget."
+        },
+        {
+          "id": "skip",
+          "label": "Skip the food",
+          "outcome": "You skip the food and eat at home."
+        }
+      ]
+    },
+    {
+      "id": "church-outfit",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Something to wear",
+      "body": "A wedding at church on Saturday and nothing in your wardrobe is right. A new dress is £35. There's one in a charity shop for £12.",
+      "options": [
+        {
+          "id": "new",
+          "label": "Buy a new one (£35)",
+          "spend": {
+            "goals": 3500
+          },
+          "outcome": "New. It fits properly."
+        },
+        {
+          "id": "charity",
+          "label": "Charity shop (£12)",
+          "spend": {
+            "enjoyment": 1200
+          },
+          "outcome": "£12. It needs taking in."
+        },
+        {
+          "id": "borrow",
+          "label": "Borrow",
+          "outcome": "You borrow one. It comes back on Monday."
+        }
+      ]
+    },
+    {
+      "id": "escape-room",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Escape room, six of you",
+      "body": "£14 each, an hour long, and somebody has already booked it. They need a yes by tonight.",
+      "options": [
+        {
+          "id": "in",
+          "label": "You're in (£14)",
+          "spend": {
+            "enjoyment": 1400
+          },
+          "outcome": "£14. You get out with four minutes to spare."
+        },
+        {
+          "id": "out",
+          "label": "You're out",
+          "outcome": "You're out. They send you the photo afterwards."
+        }
+      ]
+    },
+    {
+      "id": "sell-old-things",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Things you've outgrown",
+      "body": "A bag of clothes and a few games you don't use. Listing them online would take an evening and bring in about £15. Or it can all go to the charity shop.",
+      "options": [
+        {
+          "id": "list",
+          "label": "List them online (+£15)",
+          "income": 1500,
+          "takesEvening": true,
+          "outcome": "Listed. Photos, descriptions, and replies at eleven at night."
+        },
+        {
+          "id": "donate",
+          "label": "Take it to the charity shop",
+          "outcome": "You take the bag in. It's gone in two minutes."
+        }
+      ]
+    },
+    {
+      "id": "babysitting-offer",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Babysitting on Saturday",
+      "body": "A family at church needs someone from six till eleven. £20, and the kids will be in bed by eight.",
+      "options": [
+        {
+          "id": "sit",
+          "label": "Say yes (+£20)",
+          "income": 2000,
+          "takesEvening": true,
+          "outcome": "Yes. The kids are asleep by eight."
+        },
+        {
+          "id": "no",
+          "label": "Say no",
+          "outcome": "You say no. They ask someone else."
+        }
+      ]
+    },
+    {
+      "id": "dog-walking",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "The neighbours' dog",
+      "body": "The neighbours are away for three days and would pay £8 for an evening walk each day. It's an hour round the fields at Millbrook.",
+      "options": [
+        {
+          "id": "walk",
+          "label": "Say yes (+£8)",
+          "income": 800,
+          "takesEvening": true,
+          "outcome": "Yes. The dog is the easy part."
+        },
+        {
+          "id": "no",
+          "label": "Say no",
+          "outcome": "You say no."
+        }
+      ]
+    },
+    {
+      "id": "return-it",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Still in the bag",
+      "body": "You bought it two weeks ago and haven't used it once. You can return it until Friday for the £14 you paid.",
+      "options": [
+        {
+          "id": "return",
+          "label": "Take it back (+£14)",
+          "income": 1400,
+          "outcome": "Returned. £14 back."
+        },
+        {
+          "id": "keep",
+          "label": "Keep it",
+          "outcome": "You keep it. You'll use it."
+        }
+      ]
+    },
+    {
+      "id": "free-trial-ends",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "The free trial ends tomorrow",
+      "body": "It becomes £7.99 a month unless you cancel it. You've used it three times.",
+      "options": [
+        {
+          "id": "keep",
+          "label": "Keep it (£7.99/mo)",
+          "outcome": "You keep it."
+        },
+        {
+          "id": "cancel",
+          "label": "Cancel it",
+          "outcome": "Cancelled. It takes four screens and a survey."
+        }
+      ]
+    },
+    {
+      "id": "club-hoodie",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "The club hoodie",
+      "body": "Everyone is ordering one. £28, and it takes six weeks. There's a second-hand one from last year's lot for £10.",
+      "options": [
+        {
+          "id": "new",
+          "label": "Order the new one (£28)",
+          "spend": {
+            "enjoyment": 2800
+          },
+          "outcome": "Ordered. It's six weeks away."
+        },
+        {
+          "id": "used",
+          "label": "Take the second-hand one (£10)",
+          "spend": {
+            "enjoyment": 1000
+          },
+          "outcome": "£10. It smells of someone else's house for a week."
+        },
+        {
+          "id": "none",
+          "label": "Neither",
+          "outcome": "You don't order one."
+        }
+      ]
+    },
+    {
+      "id": "halloween-costume",
+      "kind": "dilemma",
+      "weight": 3,
+      "season_window": "10-24..10-31",
+      "title": "The costume for Saturday",
+      "body": "A party on Saturday and everyone's dressing up. Ready-made is £14. You could put one together from what's in the house.",
+      "options": [
+        {
+          "id": "bought",
+          "label": "Buy one (£14)",
+          "spend": {
+            "enjoyment": 1400
+          },
+          "outcome": "You buy one. It comes in a bag with a hat."
+        },
+        {
+          "id": "made",
+          "label": "Put one together",
+          "takesEvening": true,
+          "outcome": "It takes an evening. It's better than the one in the shop."
+        },
+        {
+          "id": "none",
+          "label": "Go as yourself",
+          "outcome": "You go as yourself."
+        }
+      ]
+    },
+    {
+      "id": "christmas-jumper-day",
+      "kind": "dilemma",
+      "weight": 3,
+      "season_window": "12-05..12-14",
+      "title": "Christmas jumper day",
+      "body": "It's on Friday. £1 to the charity if you wear one. There's a new one in the shop for £16.",
+      "options": [
+        {
+          "id": "new",
+          "label": "Buy a new one (£16)",
+          "spend": {
+            "enjoyment": 1600
+          },
+          "outcome": "New one. You'll wear it twice a year."
+        },
+        {
+          "id": "old",
+          "label": "Wear last year's (£1)",
+          "spend": {
+            "giving_reserve": 100
+          },
+          "outcome": "Last year's. £1 into the tin."
+        },
+        {
+          "id": "none",
+          "label": "Wear a normal jumper",
+          "outcome": "A normal jumper. Nobody checks."
+        }
+      ]
+    },
+    {
+      "id": "after-the-sales",
+      "kind": "dilemma",
+      "weight": 3,
+      "season_window": "12-27..01-05",
+      "title": "The sales",
+      "body": "Everything's half price and half of it is things you already have. There's one thing you do want. £30, down from £60.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy it (£30)",
+          "spend": {
+            "goals": 3000
+          },
+          "outcome": "Bought. It was £60 on Friday."
+        },
+        {
+          "id": "leave",
+          "label": "Leave it",
+          "outcome": "You leave it. It will be £60 again in February."
+        }
+      ]
+    },
+    {
+      "id": "result-treat",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "Results day",
+      "body": "You did better than you thought. Your friends are going for something to eat to mark it.",
+      "options": [
+        {
+          "id": "meal",
+          "label": "Go and eat properly (£12)",
+          "spend": {
+            "enjoyment": 1200
+          },
+          "outcome": "£12. It was worth it."
+        },
+        {
+          "id": "snack",
+          "label": "Just a snack (£4)",
+          "spend": {
+            "enjoyment": 400
+          },
+          "outcome": "£4. You're home by six."
+        },
+        {
+          "id": "home",
+          "label": "Go home",
+          "outcome": "You go home and ring your gran."
+        }
+      ]
+    },
+    {
+      "id": "headphones-gone",
+      "kind": "dilemma",
+      "weight": 2,
+      "title": "One side of the headphones",
+      "body": "The left side has gone. A good new pair is £40. A cheap pair is £12. Or you can listen in one ear.",
+      "options": [
+        {
+          "id": "good",
+          "label": "Good ones (£40)",
+          "spend": {
+            "goals": 4000
+          },
+          "outcome": "Good ones. They sound like different music."
+        },
+        {
+          "id": "cheap",
+          "label": "Cheap ones (£12)",
+          "spend": {
+            "enjoyment": 1200
+          },
+          "outcome": "Cheap ones. They'll do for now."
+        },
+        {
+          "id": "one",
+          "label": "One ear",
+          "outcome": "One ear."
+        }
+      ]
+    },
+    {
+      "id": "school-photo",
+      "kind": "event",
+      "weight": 2,
+      "title": "School photo envelope",
+      "body": "The package you ordered is £12. Everyone else's came back in the envelope this morning.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "Pay it (£12)",
+          "obligation": 1200,
+          "outcome": "£12. It's not your best."
+        },
+        {
+          "id": "skip",
+          "label": "Don't order",
+          "outcome": "You send the envelope back empty."
+        }
+      ]
+    },
+    {
+      "id": "bus-fare-rise",
+      "kind": "event",
+      "weight": 2,
+      "title": "Fares are going up",
+      "body": "The Millbrook to Eastport bus is going up. £2 more a week, from Monday.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "It goes out",
+          "obligation": 200
+        }
+      ]
+    },
+    {
+      "id": "non-uniform-day",
+      "kind": "event",
+      "weight": 2,
+      "title": "Non-uniform day",
+      "body": "It's £2 for the charity if you come in your own clothes. Most people do.",
+      "options": [
+        {
+          "id": "two",
+          "label": "£2",
+          "spend": {
+            "giving_reserve": 200
+          },
+          "outcome": "£2. You pick the jacket."
+        },
+        {
+          "id": "uniform",
+          "label": "Wear uniform",
+          "outcome": "You wear uniform."
+        }
+      ]
+    },
+    {
+      "id": "poppy-seller",
+      "kind": "event",
+      "weight": 2,
+      "season_window": "10-28..11-11",
+      "title": "The poppy seller",
+      "body": "Outside the shop, in the cold, for hours. There's a tin and a tray.",
+      "options": [
+        {
+          "id": "five",
+          "label": "£5",
+          "spend": {
+            "giving_reserve": 500
+          }
+        },
+        {
+          "id": "two",
+          "label": "£2",
+          "spend": {
+            "giving_reserve": 200
+          }
+        },
+        {
+          "id": "none",
+          "label": "Walk past",
+          "outcome": "You walk past."
+        }
+      ]
+    },
+    {
+      "id": "shoebox-appeal",
+      "kind": "event",
+      "weight": 2,
+      "season_window": "11-05..11-15",
+      "title": "Shoebox appeal",
+      "body": "Boxes go in at church this week. Soap, a toy, a hat, a pencil case. A full one is about £10 if you pick things carefully.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Fill a box (£10)",
+          "spend": {
+            "giving_reserve": 1000
+          },
+          "outcome": "A box, wrapped, with a note."
+        },
+        {
+          "id": "small",
+          "label": "Put in £4 towards one",
+          "spend": {
+            "giving_reserve": 400
+          }
+        },
+        {
+          "id": "none",
+          "label": "Not this year",
+          "outcome": "Not this year."
+        }
+      ]
+    },
+    {
+      "id": "christmas-cards",
+      "kind": "event",
+      "weight": 2,
+      "season_window": "12-05..12-18",
+      "title": "Christmas cards",
+      "body": "A box of twenty, stamps for the ones that have to be posted. It comes to £6.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "It goes out",
+          "obligation": 600
+        }
+      ]
+    },
+    {
+      "id": "secret-santa",
+      "kind": "event",
+      "weight": 3,
+      "season_window": "12-10..12-20",
+      "title": "Secret Santa",
+      "body": "£5 limit. You drew somebody you don't talk to much.",
+      "options": [
+        {
+          "id": "pay",
+          "label": "It goes out (£5)",
+          "obligation": 500
+        }
+      ]
+    },
+    {
+      "id": "christmas-money",
+      "kind": "event",
+      "weight": 4,
+      "season_window": "12-25..12-31",
+      "title": "Christmas money",
+      "body": "Cards open and £20 falls out of one from your gran. It's the only card with money in it.",
+      "options": [
+        {
+          "id": "take",
+          "label": "Yours",
+          "income": 2000
+        }
+      ]
+    },
+    {
+      "id": "gran-tenner",
+      "kind": "event",
+      "weight": 1,
+      "title": "A tenner from Gran",
+      "body": "She presses it into your hand at the door and says it's not for anything in particular.",
+      "options": [
+        {
+          "id": "take",
+          "label": "Yours",
+          "income": 1000
+        }
+      ]
+    },
+    {
+      "id": "paid-back",
+      "kind": "event",
+      "weight": 1,
+      "title": "She paid you back",
+      "body": "A message from last month. It's £6 and an apology, and you'd stopped counting on it.",
+      "options": [
+        {
+          "id": "take",
+          "label": "Yours",
+          "income": 600
+        }
+      ]
+    },
+    {
+      "id": "voucher-in-card",
+      "kind": "event",
+      "weight": 1,
+      "title": "A voucher in a card",
+      "body": "£10 for somewhere you actually go. It has to be used by March.",
+      "options": [
+        {
+          "id": "take",
+          "label": "Yours",
+          "income": 1000
+        }
+      ]
+    },
+    {
+      "id": "uniform-jumper",
+      "kind": "event",
+      "weight": 2,
+      "title": "Lost property",
+      "body": "Your school jumper is not in lost property. It's not at home either. A new one is £14.",
+      "options": [
+        {
+          "id": "buy",
+          "label": "Buy a new one (£14)",
+          "obligation": 1400,
+          "outcome": "£14. The new one is the wrong shade of blue."
+        },
+        {
+          "id": "old",
+          "label": "Wear last year's",
+          "outcome": "Last year's. The sleeves are short."
+        }
+      ]
+    },
+    {
+      "id": "data-runs-out",
+      "kind": "event",
+      "weight": 2,
+      "title": "Data's gone",
+      "body": "It's the 19th and your data ran out this morning. A top-up is £5.",
+      "options": [
+        {
+          "id": "top",
+          "label": "Top up (£5)",
+          "obligation": 500,
+          "outcome": "Topped up."
+        },
+        {
+          "id": "wait",
+          "label": "Use wifi until the 1st",
+          "outcome": "You use wifi until the 1st. It's a long fortnight."
+        }
+      ]
+    },
+    {
+      "id": "cake-sale",
+      "kind": "event",
+      "weight": 2,
+      "title": "Cake sale at school",
+      "body": "It's for the charity the school picked. The cakes are £1 each, and half of them look homemade.",
+      "options": [
+        {
+          "id": "three",
+          "label": "£3",
+          "spend": {
+            "giving_reserve": 300
+          },
+          "outcome": "Three cakes. One is for later."
+        },
+        {
+          "id": "one",
+          "label": "£1",
+          "spend": {
+            "giving_reserve": 100
+          },
+          "outcome": "One cake."
+        },
+        {
+          "id": "none",
+          "label": "Walk past",
+          "outcome": "You walk past."
+        }
+      ]
+    },
+    {
+      "id": "baby-gift-collection",
+      "kind": "event",
+      "weight": 2,
+      "title": "A collection at church",
+      "body": "Someone's had a baby. There's an envelope going round after the service.",
+      "options": [
+        {
+          "id": "five",
+          "label": "£5",
+          "spend": {
+            "giving_reserve": 500
+          }
+        },
+        {
+          "id": "two",
+          "label": "£2",
+          "spend": {
+            "giving_reserve": 200
+          }
+        },
+        {
+          "id": "sign",
+          "label": "Sign the card",
+          "outcome": "You sign the card."
+        }
+      ]
+    },
+    {
+      "id": "school-fair-table",
+      "kind": "dilemma",
+      "weight": 3,
+      "season_window": "11-14..12-06",
+      "title": "A table at the school fair",
+      "body": "The school Christmas fair has tables at £5. It's on Saturday and there'll be a lot of parents.",
+      "options": [
+        {
+          "id": "book",
+          "label": "Book a table (£5)",
+          "spend": {
+            "goals": 500
+          },
+          "extraMarket": {
+            "daysAhead": 6,
+            "boost": 1.5
+          },
+          "outcome": "Booked. Whatever you have by Saturday is what you've got."
+        },
+        {
+          "id": "skip",
+          "label": "Give it a miss",
+          "outcome": "You give it a miss."
+        }
+      ]
+    }
+  ],
+  "_time": "Cards with `takesEvening` on an option consume one of the week's five evenings (spec §6). That is the only cost in the game a player feels rather than counts, so the cheap option is usually the one that carries it. the designer, 18 Sep: \"buy something to save time, or save the money and take the time.\""
+}
