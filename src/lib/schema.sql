@@ -1,4 +1,4 @@
--- The Season — Phase 1 schema.
+-- The Money Trials — Phase 1 schema.
 -- All money is stored as INTEGER PENCE. Never floats: a budgeting game that
 -- loses a penny to rounding teaches the wrong lesson.
 

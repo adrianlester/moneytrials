@@ -22,7 +22,7 @@ import { buySupplies, decideSales, makeOn, pendingSales } from "@/lib/hustle";
 /* ------------------------------------------------------------------- setup */
 
 export async function createSeasonAction(formData: FormData): Promise<void> {
-  const name = String(formData.get("name") ?? "").trim() || "The Season";
+  const name = String(formData.get("name") ?? "").trim() || "The Money Trials";
   const startDate = String(formData.get("start_date") ?? "") || londonToday();
   const weeks = Number(formData.get("weeks") ?? 12);
   const frequency = String(formData.get("charity_frequency") ?? "normal") as

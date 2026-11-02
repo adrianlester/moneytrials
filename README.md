@@ -1,4 +1,4 @@
-# The Season
+# The Money Trials
 
 A 12-week budgeting game for teenagers. Each player runs their own economy as a 16-year-old with a Saturday job. Once a week they decide where every pound goes. Every other day they answer one short money question, such as an overtime shift against a friend's party. A parent plays the world: sets wages, writes cards and approves changes.
 

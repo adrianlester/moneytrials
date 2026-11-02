@@ -8,7 +8,7 @@
  * Sam has asked to change her Committed Giving, so the admin has one thing waiting.
  *
  * Run (PGLITE_DIR must point at an empty folder):
- *   $env:PGLITE_DIR = 'C:\Users\adria\Documents\the-season-history'
+ *   $env:PGLITE_DIR = "$env:TEMP\moneytrials-playground"
  *   npx tsx --conditions=react-server scripts/seed-playground.ts
  */
 import { q } from "../src/lib/db";
@@ -45,7 +45,7 @@ function netCost(o: CardOption): number {
 
 async function main() {
   const seasonId = await createSeason({
-    name: "The Season (playground)", startDate: START, weeks: 12, charityFrequency: "generous", paydayWeekday: 6,
+    name: "The Money Trials (playground)", startDate: START, weeks: 12, charityFrequency: "generous", paydayWeekday: 6,
     players: [
       { name: "Robin", pin: "1111", role: "player", craft: "crochet" },
       { name: "Sam", pin: "2222", role: "player", craft: "baking" },

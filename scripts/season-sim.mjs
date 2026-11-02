@@ -135,7 +135,7 @@ function pct(sorted, p) {
 }
 
 console.log(
-  `The Season — ${WEEKS} weeks · base wage £${WAGE / 100} · committed giving £${GIVING / 100}/wk · ` +
+  `The Money Trials — ${WEEKS} weeks · base wage £${WAGE / 100} · committed giving £${GIVING / 100}/wk · ` +
   `${CARDS.length} cards · ${RUNS.toLocaleString()} runs\n`,
 );
 

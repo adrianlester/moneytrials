@@ -1,4 +1,4 @@
-# Deploying The Season to Vercel
+# Deploying The Money Trials to Vercel
 
 The app is ready to deploy: `next build` passes and `next.config.ts` makes sure the schema and the
 deck are bundled. Three things only you can do, because they need your accounts and secrets.
@@ -6,7 +6,7 @@ deck are bundled. Three things only you can do, because they need your accounts 
 ## 1. Log in to Vercel (once)
 
 ```powershell
-cd C:\Users\adria\Documents\the-season
+cd moneytrials
 vercel login
 ```
 

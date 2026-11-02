@@ -20,7 +20,7 @@ export default async function Setup() {
         <div className="card">
           <div className="field">
             <label htmlFor="name">Season name</label>
-            <input id="name" name="name" defaultValue="The Season" />
+            <input id="name" name="name" defaultValue="The Money Trials" />
           </div>
           <div className="field">
             <label htmlFor="start_date">Starts</label>
