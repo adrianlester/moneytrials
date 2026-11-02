@@ -8,7 +8,7 @@ The game reports outcomes. It never scores giving and never lectures.
 
 - **Spec first.** Written from a design spec, built in four phases. Phase 1 was playable end to end before anything else was added.
 - **Tuned with simulation.** Bot players ran thousands of seasons through the real engine. That showed extra shifts out-earned the main job, so shifts are capped at two a week.
-- **Tested.** Each feature has a test script that runs against the real engine and a local Postgres.
+- **Tested.** Each feature has a test script that runs against the real engine and a local Postgres. `npm test` runs them all.
 - **Shipped.** Next.js and TypeScript on Vercel, Postgres on Neon, a daily cron for the day rollover. It runs locally on PGlite with no setup.
 - **Built with Claude Code.** I set the brief, made the design calls and tested it as a user. Claude Code wrote the code.
 

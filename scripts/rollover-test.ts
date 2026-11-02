@@ -1,6 +1,6 @@
 /**
  * Day-rollover check against a throwaway PGlite already seeded by hustle-test.ts.
- * Run: PGLITE_DIR=$TEMP/hustle-test npx tsx --conditions=react-server scripts/rollover-test.ts
+ * Run with npm test, which runs it straight after hustle-test.ts on the same database.
  */
 import { q, one } from "../src/lib/db";
 import { rolloverAll, takeNotices } from "../src/lib/rollover";

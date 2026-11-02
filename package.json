@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "deck:check": "node scripts/deck-check.mjs"
+    "deck:check": "node scripts/deck-check.mjs",
+    "test": "node scripts/run-tests.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.2.17",

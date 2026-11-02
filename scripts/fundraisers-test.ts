@@ -66,7 +66,7 @@ async function main() {
   );
   const sales = await q<{ id: string }>(`SELECT id FROM stock_item WHERE player_id=$1 AND status='sold' ORDER BY price DESC`, [robin]);
   const resBefore = (await envelopeOf(robin, "giving_reserve")).balance;
-  const d = await decideSales(robin, null, { [sales[0].id]: "fundraiser", [sales[1].id]: "me" });
+  const d = await decideSales(robin, null, { [sales[0].id]: "fundraiser", [sales[1].id]: "me" }, "2026-10-24");
   check("one sale to the fundraiser, one kept", d.raised === 600 && d.kept === 400);
   const f2 = await myFundraiser(robin, "2026-10-22");
   check("the sale counts toward the total", f2?.raised === 600 && f2.fromSales === 600, `${f2?.raised}`);
@@ -77,7 +77,7 @@ async function main() {
   check("it is recorded as a gift", Number(ownGift?.n) === 1);
   const seen = (await openAsks(sam, seasonId, "2026-10-22")).find((a) => a.kind === "fundraiser");
   check("the other player sees the sales in the raised figure", seen?.fundraiser?.raised === 600, `${seen?.fundraiser?.raised}`);
-  const refused = await decideSales(robin, null, {});
+  const refused = await decideSales(robin, null, {}, "2026-10-24");
   check("nothing pending, nothing happens", refused.raised === 0);
 
   console.log(failures ? `\n${failures} FAILED` : "\nall passed");

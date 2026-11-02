@@ -357,12 +357,13 @@ export async function decideSales(
   playerId: string,
   weekId: string | null,
   decisions: Record<string, "me" | "giving" | "fundraiser">,
+  today: string = londonToday(),
 ): Promise<{ kept: number; given: number; raised: number }> {
   const pending = await pendingSales(playerId);
   let kept = 0;
   let given = 0;
   let raised = 0;
-  const fund = await openSalesFundraiser(playerId);
+  const fund = await openSalesFundraiser(playerId, today);
 
   for (const sale of pending) {
     const dest = decisions[sale.id];
@@ -391,11 +392,14 @@ export async function decideSales(
 }
 
 /** The player's fundraiser if it is still open and raising through sales. */
-export async function openSalesFundraiser(playerId: string): Promise<{ id: string; cause: string } | null> {
+export async function openSalesFundraiser(
+  playerId: string,
+  today: string = londonToday(),
+): Promise<{ id: string; cause: string } | null> {
   return one<{ id: string; cause: string }>(
     `SELECT f.id, f.cause FROM fundraiser f JOIN ask a ON a.id = f.ask_id
       WHERE f.player_id = $1 AND f.method = 'sales' AND a.closes >= $2
       ORDER BY f.started_on DESC LIMIT 1`,
-    [playerId, londonToday()],
+    [playerId, today],
   );
 }
