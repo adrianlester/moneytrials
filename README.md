@@ -4,6 +4,8 @@ A 12-week budgeting game for teenagers. Each player runs their own economy as a 
 
 The game reports outcomes. It never scores giving and never lectures.
 
+**Try it:** [moneytrials.co.uk](https://moneytrials.co.uk) is a demo with made-up players, three weeks into a season. The logins are on the page, and it resets every night.
+
 ## What this project shows
 
 - **Spec first.** Written from a design spec, built in four phases. Phase 1 was playable end to end before anything else was added.
