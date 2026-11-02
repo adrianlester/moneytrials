@@ -53,20 +53,36 @@ async function makeBackend(): Promise<Backend> {
 async function backend(): Promise<Backend> {
   if (!backendPromise) {
     backendPromise = makeBackend().then(async (b) => {
-      const schema = fs.readFileSync(
-        path.join(process.cwd(), "src", "lib", "schema.sql"),
-        "utf8",
-      );
-      // Statement-at-a-time: PGlite's simple protocol will not take a batch.
-      // Normalised first: an editor that saves CRLF would otherwise turn the whole
-      // schema into one statement, which PGlite rejects.
-      for (const stmt of schema.replace(/\r\n/g, "\n").split(";\n").map((s) => s.trim()).filter(Boolean)) {
-        await b.query(stmt);
-      }
+      await applySchema(b);
       return b;
     });
   }
   return backendPromise;
+}
+
+async function applySchema(b: Backend): Promise<void> {
+  const schema = fs.readFileSync(
+    path.join(process.cwd(), "src", "lib", "schema.sql"),
+    "utf8",
+  );
+  // Statement-at-a-time: PGlite's simple protocol will not take a batch.
+  // Normalised first: an editor that saves CRLF would otherwise turn the whole
+  // schema into one statement, which PGlite rejects.
+  for (const stmt of schema.replace(/\r\n/g, "\n").split(";\n").map((s) => s.trim()).filter(Boolean)) {
+    await b.query(stmt);
+  }
+}
+
+/** Drops every table and recreates the schema empty. Only the demo's nightly reset calls this. */
+export async function resetSchema(): Promise<void> {
+  const b = await backend();
+  const tables = await b.query<{ tablename: string }>(
+    `SELECT tablename FROM pg_tables WHERE schemaname = 'public'`,
+  );
+  if (tables.length) {
+    await b.query(`DROP TABLE ${tables.map((t) => `"${t.tablename}"`).join(", ")} CASCADE`);
+  }
+  await applySchema(b);
 }
 
 export async function q<T = Row>(sql: string, params: unknown[] = []): Promise<T[]> {

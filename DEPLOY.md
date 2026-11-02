@@ -46,3 +46,20 @@ admin). The schema creates itself on the first request.
   (British Summer Time). Vercel's free plan allows one daily cron.
 - Nobody has run setup on the real site, so the first thing to do after deploying is `/setup`.
 - The local `.data/` folder is the old test database and is not used on Vercel.
+
+## Running it as the public demo
+
+The same code runs as a demo with made-up players when `DEMO_MODE=1` is set:
+
+- The login page shows the test logins (Robin 1111, Sam 2222, Dad 3333).
+- `/setup` is closed, so visitors can't create a season.
+- The daily cron wipes the database and seeds a fresh season with today in week 4
+  (`src/lib/demo.ts`), so whatever visitors change is gone the next morning.
+
+Deploy it as its own Vercel project with its own Neon database, never the one a real family plays on.
+Set `DEMO_MODE` to `1` alongside the three variables above. To seed it the first time, call the cron
+yourself:
+
+```powershell
+curl.exe -H "Authorization: Bearer <CRON_SECRET>" https://<your-domain>/api/cron/rollover
+```

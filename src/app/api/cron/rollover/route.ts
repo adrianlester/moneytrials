@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { rolloverAll } from "@/lib/rollover";
+import { demoMode, resetDemo } from "@/lib/demo";
 
 export const dynamic = "force-dynamic";
+// The demo reset replays three weeks through the engine, which takes far longer than a rollover.
+export const maxDuration = 300;
 
 /**
  * Vercel Cron calls this with `Authorization: Bearer $CRON_SECRET`. With no secret
@@ -22,6 +25,10 @@ function authorised(req: Request): boolean {
 export async function GET(req: Request) {
   if (!authorised(req)) {
     return NextResponse.json({ error: "unauthorised" }, { status: 401 });
+  }
+  // In the demo the daily run is a reset: a fresh season with today in week 4.
+  if (demoMode()) {
+    return NextResponse.json({ ok: true, demoReset: await resetDemo() });
   }
   const result = await rolloverAll();
   return NextResponse.json({ ok: true, ...result });

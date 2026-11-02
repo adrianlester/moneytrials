@@ -1,11 +1,14 @@
 import { redirect } from "next/navigation";
 import { currentSeason } from "@/lib/seed";
 import { londonToday } from "@/lib/engine";
+import { demoMode } from "@/lib/demo";
 import { createSeasonAction } from "../actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Setup() {
+  // The demo's season comes from the nightly reset, never from a visitor.
+  if (demoMode()) redirect("/login");
   const existing = await currentSeason();
   if (existing && existing.status !== "ended") redirect("/login");
 
