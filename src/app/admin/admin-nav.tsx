@@ -5,7 +5,7 @@ export function AdminNav({ on }: { on: "overview" | "cards" | "ledger" | "report
   return (
     <>
       <form action={logoutAction} style={{ marginTop: 24 }}>
-        <button type="submit">Log out</button>
+        <button type="submit" className="secondary">Log out</button>
       </form>
       <nav className="bottom">
         <Link href="/admin" className={on === "overview" ? "on" : ""}>Overview</Link>

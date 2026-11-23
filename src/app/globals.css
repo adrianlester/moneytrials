@@ -14,6 +14,13 @@
   --warn: #f0b866;
   --bad: #f08a8a;
   --radius: 14px;
+  /* One marker colour per envelope, used on Today, Payday and Ledger. Identity only:
+     the game never scores giving, so none of these is a judgement colour. */
+  --env-bills: #7cb7ff;
+  --env-goals: #6ee7a8;
+  --env-enjoyment: #f5a3d0;
+  --env-giving_reserve: #b39dfc;
+  --env-committed_giving: #8fd3e8;
 }
 
 * { box-sizing: border-box; }
@@ -66,7 +73,20 @@ a { color: var(--accent); }
 /* A blurb is the small line under a label. It was inline, so it ran straight on from
    the label ("Making" + "Turn supplies..." read as one word). Always its own line. */
 .blurb { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; font-weight: 400; }
-.amount { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 17px; white-space: nowrap; }
+.amount { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 18px; white-space: nowrap; }
+
+/* A card's title reads as a title, its body as body. */
+.card.big > p:first-child strong { font-size: 18px; line-height: 1.3; }
+
+/* Envelope markers. */
+.env-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px;
+  vertical-align: 1px; background: var(--muted); flex: none; }
+.env-dot.bills, .env-chip.env-bills { --env: var(--env-bills); }
+.env-dot.goals, .env-chip.env-goals { --env: var(--env-goals); }
+.env-dot.enjoyment, .env-chip.env-enjoyment { --env: var(--env-enjoyment); }
+.env-dot.giving_reserve, .env-chip.env-giving_reserve { --env: var(--env-giving_reserve); }
+.env-dot.committed_giving, .env-chip.env-committed_giving { --env: var(--env-committed_giving); }
+.env-dot { background: var(--env, var(--muted)); }
 .amount.zero { color: var(--muted); }
 .amount.neg { color: var(--bad); }
 
@@ -97,14 +117,31 @@ button.primary, .btn.primary {
   text-align: center;
 }
 
+/* Secondary actions (Save, Add it, Sign out) look different from an answer to a card. */
+button.secondary, .btn.secondary {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--muted);
+  text-align: center;
+  min-height: 46px;
+  padding: 11px 16px;
+}
+button.secondary:hover { color: var(--text); border-color: var(--muted); }
+
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+
 button:active, .btn:active { transform: translateY(1px); }
+
+/* Keyboard focus is always visible. */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:focus-visible, .btn:focus-visible, input:focus-visible, select:focus-visible { outline-offset: 1px; }
 
 /* Today: the five envelope balances as one compact row. */
 .env-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin: 0 0 14px; }
-.env-chip { background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
-  padding: 7px 2px; text-align: center; min-width: 0; }
+.env-chip { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--env, var(--line));
+  border-radius: 10px; padding: 6px 2px 7px; text-align: center; min-width: 0; }
 .env-name { display: block; font-size: 11px; color: var(--muted); }
-.env-amt { display: block; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums;
+.env-amt { display: block; font-size: 13.5px; font-weight: 700; font-variant-numeric: tabular-nums;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .env-amt.zero { color: var(--muted); }
 .next { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
@@ -124,6 +161,31 @@ button.demo-fill { text-align: center; font-weight: 600; }
 /* Demo front door: one tap per player. */
 .demo-doors { margin: 20px 0 8px; }
 .demo-doors button { text-align: left; }
+.choice { background: var(--surface-2); }
+
+/* Payday: what's left to assign stays in view above the nav while you scroll. */
+.assign-pin { position: sticky; bottom: 64px; z-index: 5; box-shadow: 0 -6px 18px rgba(0,0,0,0.35); }
+.assign-pin.done { border-color: var(--accent); }
+.assign-pin { padding-top: 6px; padding-bottom: 6px; }
+.assign-pin .row { padding: 8px 0; }
+
+/* Admin: anything waiting on the parent stands out. */
+.callout { border: 1px solid var(--warn); }
+.callout .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.callout .actions button { margin: 0; text-align: center; }
+
+/* Desktop: keep the phone column, with what the game is beside it. */
+.site-aside { display: none; }
+@media (min-width: 900px) {
+  .site-aside {
+    display: block; position: fixed; top: 96px; width: 260px;
+    left: calc(50% - 280px - 300px);
+  }
+  .site-aside h2 { margin-top: 0; color: var(--text); font-size: 20px; text-transform: none; letter-spacing: -0.01em; }
+  .site-aside p { color: var(--muted); font-size: 15px; }
+  nav.bottom { max-width: 560px; margin: 0 auto; border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line); border-radius: 14px 14px 0 0; }
+}
 .demo-doors button.primary .blurb { color: var(--accent-ink); opacity: 0.8; }
 
 input, select, textarea {
@@ -229,3 +291,4 @@ nav.bottom a.on { color: var(--accent); }
 @media (max-width: 330px) {
   .choices { grid-template-columns: 1fr; }
 }
+.env-dot.none { background: transparent; }

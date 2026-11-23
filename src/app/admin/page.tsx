@@ -40,6 +40,18 @@ export default async function Admin({
   const deckList = await decks();
   const waiting = requests.length;
 
+  // One status line per player: money across all envelopes, streak, and whether this week's wage has a job.
+  const status = await q<{ id: string; total: string | number | null; streak: number | null; allocated: boolean | null }>(
+    `SELECT p.id,
+            (SELECT SUM(balance) FROM envelope WHERE player_id = p.id) AS total,
+            (SELECT wr.streak FROM week_result wr JOIN week w ON w.id = wr.week_id
+              WHERE wr.player_id = p.id ORDER BY w.idx DESC LIMIT 1) AS streak,
+            (SELECT allocated FROM wage_roll WHERE player_id = p.id AND week_id = $2) AS allocated
+       FROM player p WHERE p.season_id = $1 AND p.role = 'player'`,
+    [season.id, week?.id ?? null],
+  );
+  const statusOf = (id: string) => status.find((s) => s.id === id);
+
   return (
     <main>
       <h1>Admin</h1>
@@ -52,19 +64,39 @@ export default async function Admin({
       {e && <div className="note err">{e}</div>}
 
       <h2>Waiting on you</h2>
-      {waiting === 0 && <div className="card"><p className="sub">Nothing waiting.</p></div>}
+      {waiting === 0 && <div className="card"><p className="sub" style={{ margin: 0 }}>Nothing waiting.</p></div>}
       {requests.map((r) => (
-        <form action={commitmentDecisionAction} className="card" key={r.id}>
+        <form action={commitmentDecisionAction} className="card big callout" key={r.id}>
           <input type="hidden" name="request_id" value={r.id} />
           <p><strong>{r.name} wants to change Committed Giving</strong></p>
           <p className="sub">From {gbp(r.current)} to {gbp(r.new_amount)} a week, from the next payday.</p>
-          <button type="submit" name="decision" value="approve" className="primary">Approve</button>
-          <button type="submit" name="decision" value="decline">Decline</button>
+          <div className="actions">
+            <button type="submit" name="decision" value="approve" className="primary">Approve</button>
+            <button type="submit" name="decision" value="decline" className="secondary">Decline</button>
+          </div>
         </form>
       ))}
 
-
       <h2>Players</h2>
+      <div className="card">
+        {players.map((p) => {
+          const s = statusOf(p.id);
+          return (
+            <div className="row" key={p.id}>
+              <span className="label">
+                {p.display_name}
+                <span className="blurb">
+                  {s?.streak ? `${s.streak} week streak` : "No streak yet"}
+                  {week ? (s?.allocated ? " · wage has a job" : " · payday waiting") : ""}
+                </span>
+              </span>
+              <span className="amount">{gbp(Number(s?.total ?? 0))}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      <h2>Player settings</h2>
       {players.map((p) => (
         <form action={playerAction} className="card" key={p.id}>
           <input type="hidden" name="player_id" value={p.id} />
@@ -85,7 +117,7 @@ export default async function Admin({
               {deckList.map((d) => <option key={d.id} value={d.id}>{d.id}{d.overrides ? ` (${d.overrides} cards changed)` : ""}</option>)}
             </select>
           </div>
-          <button type="submit">Save</button>
+          <button type="submit" className="secondary">Save</button>
           <p className="hint" style={{ marginTop: 10 }}>A new wage applies to every week not yet paid.</p>
         </form>
       ))}
@@ -106,7 +138,7 @@ export default async function Admin({
             <label htmlFor="deck_factor">Costs multiplied by</label>
             <input id="deck_factor" name="factor" defaultValue="0.8" inputMode="decimal" />
           </div>
-          <button type="submit">Build it</button>
+          <button type="submit" className="secondary">Build it</button>
         </form>
       </details>
 
@@ -128,7 +160,7 @@ export default async function Admin({
               <label htmlFor={`m-${f.id}`}>Add to it</label>
               <span className="pound"><input id={`m-${f.id}`} name="amount" defaultValue={((f.sponsors + f.fromSales) / 100).toFixed(2)} inputMode="decimal" /></span>
             </div>
-            <button type="submit">Match</button>
+            <button type="submit" className="secondary">Match</button>
           </form>
         );
       })}
@@ -143,7 +175,7 @@ export default async function Admin({
         ) : season.status === "running" ? (
           <form action={pauseAction}>
             <p className="sub">Pausing freezes play. Nobody can plan, spend or choose until you resume.</p>
-            <button type="submit">Pause the season</button>
+            <button type="submit" className="secondary">Pause the season</button>
           </form>
         ) : (
           <p className="sub">The season has ended. Adding weeks re-opens it.</p>
@@ -154,7 +186,7 @@ export default async function Admin({
           <label htmlFor="ext">Add weeks to the end</label>
           <input id="ext" name="weeks" defaultValue="1" inputMode="numeric" />
         </div>
-        <button type="submit">Add</button>
+        <button type="submit" className="secondary">Add</button>
       </form>
       <form action={frequencyAction} className="card">
         <div className="field">
@@ -165,7 +197,7 @@ export default async function Admin({
             <option value="generous">Generous</option>
           </select>
         </div>
-        <button type="submit">Save</button>
+        <button type="submit" className="secondary">Save</button>
         <p className="hint" style={{ marginTop: 10 }}>Asks that have already arrived stay. The rest are drawn again.</p>
       </form>
 

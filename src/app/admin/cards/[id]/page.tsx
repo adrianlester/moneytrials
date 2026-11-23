@@ -77,7 +77,7 @@ export default async function EditCard({
         <form action={removeOverrideAction} className="card">
           <input type="hidden" name="id" value={id} />
           <input type="hidden" name="deck" value={deck} />
-          <button type="submit">Remove the {deck} version</button>
+          <button type="submit" className="secondary">Remove the {deck} version</button>
         </form>
       )}
 

@@ -39,7 +39,7 @@ export default async function Cards({
           <label htmlFor="q">Find a card</label>
           <input id="q" name="q" defaultValue={q ?? ""} autoComplete="off" />
         </div>
-        <button type="submit">Search</button>
+        <button type="submit" className="secondary">Search</button>
       </form>
 
       <div className="card">

@@ -324,7 +324,7 @@ export default async function Home({
               <label htmlFor="goal_price">Price</label>
               <span className="pound"><input id="goal_price" name="price" inputMode="decimal" placeholder="0" autoComplete="off" /></span>
             </div>
-            <button type="submit">Add it</button>
+            <button type="submit" className="secondary">Add it</button>
           </form>
         </details>
       )}
@@ -425,7 +425,7 @@ export default async function Home({
           return (
             <div className="row" key={e.id}>
               <span className="label">
-                {rule.label}
+                <span className={`env-dot ${e.type}`} aria-hidden="true" />{rule.label}
                 <span className="blurb">{rule.blurb}</span>
                 {(e.type === "giving_reserve" || e.type === "committed_giving") && (
                   <span className="locked">can&apos;t be taken back out</span>
@@ -502,7 +502,7 @@ export default async function Home({
               <label htmlFor="f_why">A line about it (optional)</label>
               <input id="f_why" name="why" autoComplete="off" />
             </div>
-            <button type="submit">Start it</button>
+            <button type="submit" className="secondary">Start it</button>
           </form>
         </details>
       )}

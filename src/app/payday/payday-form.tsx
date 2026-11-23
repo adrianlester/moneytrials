@@ -81,7 +81,7 @@ export function PaydayForm({
         {ALLOCATABLE_TYPES.map((t) => (
           <div className="field" key={t}>
             <label htmlFor={`env_${t}`}>
-              {ENVELOPES[t].label} — {ENVELOPES[t].blurb}
+              <span className={`env-dot ${t}`} aria-hidden="true" />{ENVELOPES[t].label} — {ENVELOPES[t].blurb}
               {carried[t] > 0 && ENVELOPES[t].rollsOver
                 ? ` (${gbpShort(carried[t])} carried over)`
                 : ""}
@@ -97,18 +97,6 @@ export function PaydayForm({
             /></span>
           </div>
         ))}
-      </div>
-
-      <div className="card" aria-live="polite">
-        <div className="row">
-          <span className="label">
-            {left === 0 ? "Every pound has a job" : left > 0 ? "Still to assign" : "Over by"}
-            {left > 0 && <span className="blurb">The week can&apos;t start until this is zero.</span>}
-          </span>
-          <span className={`amount${left === 0 ? "" : left < 0 ? " neg" : ""}`}>
-            {gbp(Math.abs(left))}
-          </span>
-        </div>
       </div>
 
       {unreadable && <div className="note err">One of those isn&apos;t an amount I can read.</div>}
@@ -142,13 +130,7 @@ export function PaydayForm({
         ))}
       </div>
 
-      <div className="card" aria-live="polite">
-        <div className="row">
-          <span className="label">
-            {timeReady ? "All five evenings are spoken for" : "Evenings still to decide"}
-          </span>
-          <span className="amount">{timeReady ? "✓" : EVENINGS_PER_WEEK - eveningsChosen}</span>
-        </div>
+      {(shifts > 0 || out > 0) && <div className="card">
         {shifts > 0 && (
           <div className="row">
             <span className="label">
@@ -170,6 +152,25 @@ export function PaydayForm({
             </span>
           </div>
         )}
+      </div>}
+
+      {/* Pinned above the nav while you scroll, so the gate is always in view. */}
+      <div className={`card assign-pin${ready ? " done" : ""}`} aria-live="polite">
+        <div className="row">
+          <span className="label">
+            {left === 0 ? "Every pound has a job" : left > 0 ? "Still to assign" : "Over by"}
+            {left > 0 && <span className="blurb">The week can&apos;t start until this is zero.</span>}
+          </span>
+          <span className={`amount${left === 0 ? "" : left < 0 ? " neg" : ""}`}>
+            {gbp(Math.abs(left))}
+          </span>
+        </div>
+        <div className="row">
+          <span className="label">
+            {timeReady ? "All five evenings are spoken for" : "Evenings still to decide"}
+          </span>
+          <span className="amount">{timeReady ? "✓" : EVENINGS_PER_WEEK - eveningsChosen}</span>
+        </div>
       </div>
 
       <button className="primary" type="submit" disabled={!ready}>

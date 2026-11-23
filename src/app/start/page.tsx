@@ -87,7 +87,7 @@ export default async function Start({
         <button className="primary" type="submit">Start the season</button>
       </form>
       <form action={logoutAction} style={{ marginTop: 24 }}>
-        <button type="submit">Sign out</button>
+        <button type="submit" className="secondary">Sign out</button>
       </form>
     </main>
   );

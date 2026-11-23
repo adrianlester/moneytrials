@@ -171,6 +171,10 @@ export async function seedDemo(today = londonToday()): Promise<DemoStats> {
     }
   }
 
+  // The made-up history leaves weeks of "while you were away" notices. A visitor wasn't
+  // away, so mark them seen: otherwise the first visitor of the day gets a wall of them.
+  await q(`UPDATE notice SET seen_at = now() WHERE seen_at IS NULL`);
+
   // Something waiting for the admin to decide.
   const samId = players.find((p) => p.display_name === "Sam")!.id;
   await requestCommitmentChange(samId, lastDay, 500);

@@ -15,9 +15,10 @@ export default async function Ledger() {
   const me = await currentPlayer();
   if (!me) redirect("/login");
 
-  const rows = await q<{ day: string; type: string; amount: number; note: string }>(
-    `SELECT day, type, amount, note FROM ledger
-      WHERE player_id = $1 ORDER BY day DESC, created_at DESC LIMIT 120`,
+  const rows = await q<{ day: string; type: string; amount: number; note: string; env: string | null }>(
+    `SELECT l.day, l.type, l.amount, l.note, e.type AS env FROM ledger l
+       LEFT JOIN envelope e ON e.id = l.envelope_id
+      WHERE l.player_id = $1 ORDER BY l.day DESC, l.created_at DESC LIMIT 120`,
     [me.id],
   );
 
@@ -48,6 +49,7 @@ export default async function Ledger() {
         {rows.map((r, i) => (
           <div className="ledger-row" key={i}>
             <span>
+              {r.env ? <span className={`env-dot ${r.env}`} title={r.env.replace(/_/g, " ")} /> : <span className="env-dot none" aria-hidden="true" />}
               {r.note || r.type}
               <span className="d"> {String(r.day).slice(0, 10)}</span>
             </span>
@@ -59,7 +61,7 @@ export default async function Ledger() {
       </div>
 
       <form action={logoutAction}>
-        <button type="submit">Sign out</button>
+        <button type="submit" className="secondary">Sign out</button>
       </form>
 
       <Nav on="ledger" />
