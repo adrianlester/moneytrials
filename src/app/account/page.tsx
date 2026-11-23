@@ -58,7 +58,7 @@ export default async function Account({
               {causes.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
-          <button type="submit" className="secondary">Change cause</button>
+          <button type="submit">Change cause</button>
         </form>
       </div>
       {pending ? (
@@ -73,7 +73,7 @@ export default async function Account({
               <input id="new_amount" name="amount" inputMode="decimal" placeholder="0" autoComplete="off" />
             </span>
           </div>
-          <button type="submit" className="secondary">Ask</button>
+          <button type="submit">Ask</button>
           <p className="hint" style={{ marginTop: 10 }}>
             The amount is fixed for the season unless it&apos;s approved. If it is, it changes from the next payday.
           </p>

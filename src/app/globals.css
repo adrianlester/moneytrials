@@ -292,3 +292,5 @@ nav.bottom a.on { color: var(--accent); }
   .choices { grid-template-columns: 1fr; }
 }
 .env-dot.none { background: transparent; }
+/* The demo front door already explains the game; no side panel there. */
+body:has(.demo-doors) .site-aside { display: none; }

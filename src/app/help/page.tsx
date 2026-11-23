@@ -33,8 +33,7 @@ export default function Help() {
         <p>You see next week&apos;s hours on payday, and no further ahead.</p>
         <p>
           You give every pound a job by sharing it between the envelopes below. The week can&apos;t
-          start until you have used it all. If you leave some over, it gets spent on something
-          small and you are told what.
+          start until you have used it all: payday waits until &quot;Still to assign&quot; reads £0.
         </p>
         <p>You also plan your five evenings for the week at the same time.</p>
       </div>
