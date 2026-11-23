@@ -99,6 +99,23 @@ button.primary, .btn.primary {
 
 button:active, .btn:active { transform: translateY(1px); }
 
+/* Today: the five envelope balances as one compact row. */
+.env-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin: 0 0 14px; }
+.env-chip { background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  padding: 7px 2px; text-align: center; min-width: 0; }
+.env-name { display: block; font-size: 11px; color: var(--muted); }
+.env-amt { display: block; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.env-amt.zero { color: var(--muted); }
+.next { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
+
+details.card > summary { cursor: pointer; font-weight: 600; }
+
+/* Demo front door: one tap per player. */
+.demo-doors { margin: 20px 0 8px; }
+.demo-doors button { text-align: left; }
+.demo-doors button.primary .blurb { color: var(--accent-ink); opacity: 0.8; }
+
 input, select, textarea {
   width: 100%;
   min-height: 48px;

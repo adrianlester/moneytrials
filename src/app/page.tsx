@@ -3,7 +3,7 @@ import Link from "next/link";
 import { q, one } from "@/lib/db";
 import { currentPlayer } from "@/lib/auth";
 import { currentSeason } from "@/lib/seed";
-import { gbp } from "@/lib/money";
+import { gbp, gbpShort } from "@/lib/money";
 import { ENVELOPES } from "@/lib/envelopes";
 import {
   MAX_OPEN_GOALS, cardForPlayer, checkEnjoymentDepletion, dealCard, endSeasonIfDone, envelopes,
@@ -21,6 +21,11 @@ import {
 import { Nav } from "./nav";
 
 export const dynamic = "force-dynamic";
+
+/** Short names for the envelope strip at the top of Today. */
+const ENV_SHORT: Record<string, string> = {
+  bills: "Bills", goals: "Goals", enjoyment: "Enjoy", giving_reserve: "Reserve", committed_giving: "Giving",
+};
 
 export default async function Home({
   searchParams,
@@ -154,6 +159,31 @@ export default async function Home({
     theirLabels.set(o.display_name, label ?? "—");
   }
 
+  const reserve = envs.find((e) => e.type === "giving_reserve")?.balance ?? 0;
+  const cardWaiting = !!dealt && !resolved;
+
+  const salesLabel = salesWaiting === 1 ? "A sale is waiting on you" : `${salesWaiting} sales are waiting on you`;
+
+  // One "next thing to do": the wage first (the week can't start without it), then a sale
+  // to place, then an ask, then today's card. Sales waiting behind payday get a line.
+  const nextThing =
+    paydayDue ? (
+      <>
+        <Link href="/payday" className="btn primary">
+          {isPayday ? "It's payday: give your wage a job" : "Your wage hasn't been given a job yet"}
+        </Link>
+        {salesWaiting > 0 && <p className="next">Also: <Link href="/hustle">{salesLabel.toLowerCase()}</Link>.</p>}
+      </>
+    ) : salesWaiting > 0 ? (
+      <Link href="/hustle" className="btn primary">{salesLabel}</Link>
+    ) : asks.length > 0 ? (
+      <p className="next">Someone has asked for a donation. It&apos;s under today&apos;s card.</p>
+    ) : cardWaiting ? (
+      <p className="next">Next: today&apos;s card, below.</p>
+    ) : (
+      <p className="next">You&apos;re done for today.</p>
+    );
+
   return (
     <main>
       <h1>{me.display_name}</h1>
@@ -162,56 +192,21 @@ export default async function Home({
         {streakRow?.streak ? <> · <span className="tag good">{streakRow.streak} week streak</span></> : null}
       </p>
 
+      <div className="env-strip" aria-label="Envelope balances">
+        {envs.map((e) => (
+          <div className={`env-chip env-${e.type}`} key={e.id}>
+            <span className="env-name">{ENV_SHORT[e.type] ?? ENVELOPES[e.type].label}</span>
+            <span className={`env-amt${e.balance === 0 ? " zero" : ""}`}>{gbpShort(e.balance)}</span>
+          </div>
+        ))}
+      </div>
+
+      {nextThing}
+
       {waiting.map((n, i) => <div className="note" key={`nt${i}`}>{n}</div>)}
       {depletion && <div className="note">{depletion}</div>}
       {eveningNotes.map((n, i) => <div className="note" key={`ev${i}`}>{n}</div>)}
       {marketNotes.map((n, i) => <div className="note" key={`mk${i}`}>{n}</div>)}
-      {salesWaiting > 0 && (
-        <Link href="/hustle" className="btn primary">
-          {salesWaiting === 1 ? "A sale is waiting on you" : `${salesWaiting} sales are waiting on you`}
-        </Link>
-      )}
-
-      {isPayday && paydayDue && (
-        <Link href="/payday" className="btn primary">It&apos;s payday — allocate your money</Link>
-      )}
-      {!isPayday && paydayDue && (
-        <Link href="/payday" className="btn primary">Wage not allocated yet</Link>
-      )}
-
-      {an && <div className="note">{an}</div>}
-      {ae && <div className="note err">{ae}</div>}
-      {asks.map((a) => {
-        const reserve = envs.find((e) => e.type === "giving_reserve")?.balance ?? 0;
-        return (
-          <div className="card big" key={a.id}>
-            <p><strong>{a.title}</strong></p>
-            <p>{a.body}</p>
-            {a.fundraiser && (
-              <p className="sub">
-                {gbp(a.fundraiser.raised)} raised so far, of a {gbp(a.fundraiser.target)} target.
-              </p>
-            )}
-            <p className="sub">Giving Reserve: {gbp(reserve)}. Open until {shortDay(a.closes)}.</p>
-            <form action={answerAskAction}>
-              <input type="hidden" name="ask_id" value={a.id} />
-              {a.suggested.filter((s) => s <= reserve).map((s) => (
-                <button key={s} type="submit" name="amount" value={(s / 100).toFixed(2)}>
-                  Give {gbp(s)}
-                </button>
-              ))}
-              {reserve > 0 && (
-                <div className="field">
-                  <label htmlFor={`c-${a.id}`}>Another amount</label>
-                  <span className="pound"><input id={`c-${a.id}`} name="custom" inputMode="decimal" placeholder="0" autoComplete="off" /></span>
-                  <button type="submit">Give that</button>
-                </div>
-              )}
-              <button type="submit" name="amount" value="0">Not this time</button>
-            </form>
-          </div>
-        );
-      })}
 
       <h2>Today</h2>
       {!dealt && <div className="card"><p className="sub">No card today.</p></div>}
@@ -252,6 +247,78 @@ export default async function Home({
             </>
           )}
         </div>
+      )}
+
+      {an && <div className="note">{an}</div>}
+      {ae && <div className="note err">{ae}</div>}
+      {asks.map((a) => (
+        <div className="card big" key={a.id}>
+          <p><strong>{a.title}</strong></p>
+          <p>{a.body}</p>
+          {a.fundraiser && (
+            <p className="sub">
+              {gbp(a.fundraiser.raised)} raised so far, of a {gbp(a.fundraiser.target)} target.
+            </p>
+          )}
+          <p className="sub">Giving Reserve: {gbp(reserve)}. Open until {shortDay(a.closes)}.</p>
+          <form action={answerAskAction}>
+            <input type="hidden" name="ask_id" value={a.id} />
+            {a.suggested.filter((s) => s <= reserve).map((s) => (
+              <button key={s} type="submit" name="amount" value={(s / 100).toFixed(2)}>
+                Give {gbp(s)}
+              </button>
+            ))}
+            {reserve > 0 && (
+              <div className="field">
+                <label htmlFor={`c-${a.id}`}>Another amount</label>
+                <span className="pound"><input id={`c-${a.id}`} name="custom" inputMode="decimal" placeholder="0" autoComplete="off" /></span>
+                <button type="submit">Give that</button>
+              </div>
+            )}
+            <button type="submit" name="amount" value="0">Not this time</button>
+          </form>
+        </div>
+      ))}
+
+      <h2>Goals</h2>
+      {gn && <div className="note">{gn}</div>}
+      {ge && <div className="note err">{ge}</div>}
+      {goals.length === 0 && <div className="card"><p className="sub">You have no goals yet. Add one below: a name and a price.</p></div>}
+      {goals.map((g) => {
+        const pct = Math.min(100, Math.round((g.saved_amount / g.target_amount) * 100));
+        const funded = g.saved_amount >= g.target_amount;
+        return (
+          <div className="card" key={g.id}>
+            <div className="goal-head">
+              <span className="n">{g.name}</span>
+              <span className="p">{gbp(g.saved_amount)} of {gbp(g.target_amount)}</span>
+            </div>
+            <div className="bar"><span style={{ width: `${pct}%` }} /></div>
+            {funded && (
+              <form action={buyGoalAction} style={{ marginTop: 12 }}>
+                <input type="hidden" name="goal_id" value={g.id} />
+                <button type="submit" className="primary">Buy it ({gbp(g.target_amount)})</button>
+              </form>
+            )}
+          </div>
+        );
+      })}
+
+      {goals.length < MAX_OPEN_GOALS && (
+        <details className="card" open={goals.length === 0}>
+          <summary>Add a goal</summary>
+          <form action={addGoalAction} style={{ marginTop: 10 }}>
+            <div className="field">
+              <label htmlFor="goal_name">What is it?</label>
+              <input id="goal_name" name="name" placeholder="Trainers, a gig ticket" autoComplete="off" />
+            </div>
+            <div className="field">
+              <label htmlFor="goal_price">Price</label>
+              <span className="pound"><input id="goal_price" name="price" inputMode="decimal" placeholder="0" autoComplete="off" /></span>
+            </div>
+            <button type="submit">Add it</button>
+          </form>
+        </details>
       )}
 
       {evenings.length > 0 && (
@@ -307,7 +374,8 @@ export default async function Home({
             </div>
           </div>
 
-          <div className="card">
+          <details className="card">
+            <summary>This week&apos;s evenings</summary>
             {evenings.map((ev) => (
               <div className="row" key={ev.id}>
                 <span className="label">
@@ -321,7 +389,7 @@ export default async function Home({
                 </span>
               </div>
             ))}
-          </div>
+          </details>
         </>
       )}
 
@@ -429,44 +497,6 @@ export default async function Home({
             <button type="submit">Start it</button>
           </form>
         </details>
-      )}
-
-      <h2>Goals</h2>
-      {gn && <div className="note">{gn}</div>}
-      {ge && <div className="note err">{ge}</div>}
-      {goals.length === 0 && <div className="card"><p className="sub">You have no goals yet. Add one below: a name and a price.</p></div>}
-      {goals.map((g) => {
-        const pct = Math.min(100, Math.round((g.saved_amount / g.target_amount) * 100));
-        const funded = g.saved_amount >= g.target_amount;
-        return (
-          <div className="card" key={g.id}>
-            <div className="goal-head">
-              <span className="n">{g.name}</span>
-              <span className="p">{gbp(g.saved_amount)} of {gbp(g.target_amount)}</span>
-            </div>
-            <div className="bar"><span style={{ width: `${pct}%` }} /></div>
-            {funded && (
-              <form action={buyGoalAction} style={{ marginTop: 12 }}>
-                <input type="hidden" name="goal_id" value={g.id} />
-                <button type="submit" className="primary">Buy it ({gbp(g.target_amount)})</button>
-              </form>
-            )}
-          </div>
-        );
-      })}
-
-      {goals.length < MAX_OPEN_GOALS && (
-        <form action={addGoalAction} className="card">
-          <div className="field">
-            <label htmlFor="goal_name">Add a goal</label>
-            <input id="goal_name" name="name" placeholder="What is it?" autoComplete="off" />
-          </div>
-          <div className="field">
-            <label htmlFor="goal_price">Price</label>
-            <span className="pound"><input id="goal_price" name="price" inputMode="decimal" placeholder="0" autoComplete="off" /></span>
-          </div>
-          <button type="submit">Add it</button>
-        </form>
       )}
 
       {owned.length > 0 && (

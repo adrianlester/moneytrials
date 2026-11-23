@@ -45,6 +45,11 @@ const GOALS: Record<string, Array<[string, number]>> = {
   Robin: [["Market stall kit", 30000], ["Inline skates", 16500]],
   Sam: [["Stand mixer", 40000], ["Airbrush set", 10900]],
 };
+/** What each player saves for next once a goal is bought, in order. */
+const NEXT_GOALS: Record<string, Array<[string, number]>> = {
+  Robin: [["Yarn winder", 4500], ["Festival day ticket", 8500], ["Phone case", 2000]],
+  Sam: [["Piping set", 3500], ["Day trip to the coast", 6000], ["Cake tins", 2800]],
+};
 
 function netCost(o: CardOption): number {
   const spend = Object.values(o.spend ?? {}).reduce((n, v) => n + (v ?? 0), 0);
@@ -66,6 +71,8 @@ export async function seedDemo(today = londonToday()): Promise<DemoStats> {
   const back = addDays(today, -21);
   const start = addDays(back, -((weekdayOf(back) + 1) % 7));
   const lastDay = addDays(today, -1);
+  // A fresh copy each seed: the nightly reset runs in a long-lived process.
+  const nextGoals = Object.fromEntries(Object.entries(NEXT_GOALS).map(([k, v]) => [k, [...v]]));
 
   const seasonId = await createSeason({
     name: "The Money Trials (demo)", startDate: start, weeks: 12, charityFrequency: "generous", paydayWeekday: 6,
@@ -156,7 +163,8 @@ export async function seedDemo(today = londonToday()): Promise<DemoStats> {
           `SELECT id, saved_amount, target_amount FROM goal WHERE player_id=$1 AND bought_at IS NULL ORDER BY created_at`, [p.id],
         )) {
           if (g.saved_amount >= g.target_amount && (await buyGoal(p.id, w.id, day, g.id)).ok) {
-            await addGoal(p.id, "Next thing", 12000);
+            const next = nextGoals[p.display_name]?.shift();
+            if (next) await addGoal(p.id, next[0], next[1]);
           }
         }
       }

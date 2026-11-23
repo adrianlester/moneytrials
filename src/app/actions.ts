@@ -18,6 +18,7 @@ import {
   requestCommitmentChange, setCommittedCause, type Result,
 } from "@/lib/commitments";
 import { buySupplies, decideSales, makeOn, pendingSales } from "@/lib/hustle";
+import { DEMO_LOGINS, demoMode } from "@/lib/demo";
 
 /* ------------------------------------------------------------------- setup */
 
@@ -62,6 +63,22 @@ export async function loginAction(formData: FormData): Promise<void> {
   if (!player || !verifyPin(pin, player.pin_hash)) {
     redirect("/login?e=1");
   }
+  await startSession(player.id);
+  redirect("/");
+}
+
+/** Demo only: one tap signs in as one of the made-up players in DEMO_LOGINS. */
+export async function demoLoginAction(formData: FormData): Promise<void> {
+  if (!demoMode()) redirect("/login");
+  const name = String(formData.get("name") ?? "");
+  if (!DEMO_LOGINS.some((l) => l.name === name)) redirect("/login");
+
+  const season = await currentSeason();
+  const player = await one<{ id: string }>(
+    `SELECT id FROM player WHERE display_name = $1 AND season_id = $2`,
+    [name, season?.id ?? null],
+  );
+  if (!player) redirect("/login");
   await startSession(player.id);
   redirect("/");
 }
