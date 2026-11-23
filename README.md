@@ -6,15 +6,19 @@ The game reports outcomes. It never scores giving and never lectures.
 
 **Try it:** [moneytrials.co.uk](https://moneytrials.co.uk) is a demo with made-up players, three weeks into a season. The logins are on the page, and it resets every night.
 
+**How it was built:** [WRITEUP.md](WRITEUP.md), the product decisions behind it and what real play showed.
+
 ## What this project shows
 
 - **Spec first.** Written from a design spec, built in four phases. Phase 1 was playable end to end before anything else was added.
-- **Tuned with simulation.** Bot players ran thousands of seasons through the real engine. That showed extra shifts out-earned the main job, so shifts are capped at two a week.
+- **Tuned with simulation.** A simulation of 20,000 seasons against the game's rules showed extra shifts out-earned the main job, so shifts are capped at two a week. Bot players then played 24 full seasons through the real engine to check the spread.
 - **Tested.** Each feature has a test script that runs against the real engine and a local Postgres. `npm test` runs them all.
 - **Shipped.** Next.js and TypeScript on Vercel, Postgres on Neon, a daily cron for the day rollover. It runs locally on PGlite with no setup.
 - **Built with Claude Code.** I set the brief, made the design calls and tested it as a user. Claude Code wrote the code.
 
 The names, places and birthday cards in this copy are placeholders. Swap in your own.
+
+The design spec is private because it describes my family. Its principles are quoted in WRITEUP.md.
 
 
 ## Run it
@@ -58,18 +62,18 @@ Delete `.data/` to wipe and start a fresh season.
 
 - Five evenings a week, planned on payday in the same form as the money, with a
   gate of the same shape: all five or the week doesn't start.
-- Extra shift £22, banked until payday so it still has to be given a job.
+- Extra shift £22, capped at two a week, banked until payday so it still has to be given a job.
 - Going out costs a rolled £8–£25. The player sees the RANGE when they plan and
   the figure when the evening arrives — committing time before knowing its price
   is the point, not an oversight.
-- Making spends the evening and records it. Turning that into stock is §7's job
-  and is the seam Phase 2's second half plugs into.
+- Making spends the evening and records it. Turning that into stock is the side
+  hustle's job and is the seam Phase 2's second half plugs into.
 - Evenings resolve on the day they fall. Slot N is the Nth day of the game week.
 - `takesEvening` on a card option consumes the soonest unspent evening and tells
   the player exactly what it cost them ("It took Tuesday evening — the extra
   shift. That's £22 you won't see.").
 
-**Phase 2, second half (the side hustle, spec §7) — built and tested 6 Oct.**
+**Phase 2, second half (the side hustle) — built and tested 6 Oct.**
 
 - `/hustle` screen. Buy supplies (£12 a batch of yarn, £8 baking, paid from Goals then
   Enjoyment), spend Making evenings turning them into stock, sell on market day.
@@ -102,7 +106,7 @@ reaches the other player as an ask. `scripts/fundraisers-test.ts`. `/help` is th
 
 **Phase 4 (12 Oct) — built and tested.** `admin.ts`, `commitments.ts`, `report.ts`; pages under `app/admin`, `app/account`, `app/report`. `scripts/phase4-test.ts`. Difficulty decks are overrides stored as `<card id>@<deck>`; `cardForPlayer()` in `engine.ts` is the one place a card is shown to a player.
 
-**Not built yet:** nothing in the spec. Out of scope for v1 per the spec: investing, interest, credit cards, BNPL, notifications.
+**Not built yet:** nothing in the spec. Loans were built and then removed on 19 Oct (commit "Remove the loan feature"): under-18s can't get credit in the UK. Out of scope for v1: investing, interest, credit cards, BNPL, notifications.
 
 ## Balance
 
@@ -113,12 +117,10 @@ if those change, change the sim too.
 
 Options: `--weeks 12 --wage 95 --giving 3 --runs 20000`.
 
-**What it says as of 21 Sep, and it is the session's main finding: the time
-economy dominates the money economy.** Working all five evenings rather than
-none is worth £1,320 across a season whose base wage totals £1,140. Going out
-most evenings goes broke 88% of the time. £22 an evening against a £95 week is
-the lever doing that — five shifts out-earn the job. Left as found rather than
-tuned: £22 is the spec's own number (§6) and the spec is the authority.
+On 21 Sep the simulation showed the time economy dominated the money economy.
+Working all five evenings instead of none was worth £1,320 across a season whose
+base wage totals £1,140. Shifts were capped at two a week on 6 Oct, with the pay
+left at £22. The same gap is now £528.
 
 `node scripts/repoint-test-card.mjs <pglite-dir> <card-id>` forces today's dealt
 card to a chosen one, for testing a specific card without waiting for it to come
@@ -129,8 +131,9 @@ how the above gets tested without disturbing `.data/`.
 
 ## The deck
 
-`src/content/deck.json` — **90 cards, the ~90 a 12-week season needs (reached 6 Oct).** Card-writing
-rules are in Appendix A of the spec. Cards are seeded on season creation and upserted
+`src/content/deck.json` holds **80 cards**. A 12-week season deals 72: one on each of the six days a week that are not payday. Nine of the 80 only appear inside a date window, so an autumn season has eight to spare and a season at another time of year has 71 cards for 72 days. The margin is thin on purpose. It leaves the parent room to write a few new cards during a season, in the card screen, in response to how it is being played. A card repeats only when the deck runs out.
+
+Card-writing rules are in the design spec. Cards are seeded on season creation and upserted
 by id, so editing the JSON and creating a new season picks up changes.
 
 Run `npm run deck:check` after editing. It validates option ids across variants, the
@@ -207,8 +210,6 @@ once the variable exists in the project. Needs `DATABASE_URL` (Neon or Supabase)
 useful on Vercel, since PGlite lives on local disk.
 `npx tsx --conditions=react-server scripts/rollover-test.ts` checks it (run
 `hustle-test.ts` first against the same `PGLITE_DIR` to seed a season).
-
-The season is never marked `ended` by the job yet.
 
 ## Money
 
