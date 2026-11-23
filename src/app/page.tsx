@@ -15,6 +15,7 @@ import { craftRule } from "@/lib/hustle-data";
 import { pendingSales, resolveMarkets } from "@/lib/hustle";
 import { takeNotices } from "@/lib/rollover";
 import { ensureAsks, myFundraiser, openAsks, upcomingScheduled } from "@/lib/asks";
+import { demoMode } from "@/lib/demo";
 import {
   addGoalAction, answerAskAction, buyGoalAction, resolveCardAction, startFundraiserAction,
 } from "./actions";
@@ -169,6 +170,13 @@ export default async function Home({
   const nextThing =
     paydayDue ? (
       <>
+        {demoMode() && (
+          <div className="note demo-explain">
+            <p>
+              In this game a week can&apos;t start until every pound of the wage has a job. Tap below to do it.
+            </p>
+          </div>
+        )}
         <Link href="/payday" className="btn primary">
           {isPayday ? "It's payday: give your wage a job" : "Your wage hasn't been given a job yet"}
         </Link>

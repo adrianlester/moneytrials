@@ -14,19 +14,37 @@ import { EVENINGS, EVENING_KINDS, EVENINGS_PER_WEEK, MAX_SHIFTS_PER_WEEK, type E
  * The money gate is strict (the designer's call, 18 Sep): it refuses a leftover rather
  * than absorbing it. The time gate is the same shape — all five or none.
  */
+/** Demo only: a sensible split of the wage that sums exactly, so a visitor can see the gate open. */
+function exampleSplit(available: number): Record<string, string> {
+  const whole = (pence: number) => Math.floor(pence / 100) * 100;
+  const bills = whole(available * 0.2);
+  const enjoyment = whole(available * 0.25);
+  const giving = Math.min(500, whole(available * 0.05));
+  const goals = available - bills - enjoyment - giving;
+  const out: Record<string, number> = { bills, enjoyment, giving_reserve: giving, goals };
+  return Object.fromEntries(Object.entries(out).map(([k, v]) => [k, (v / 100).toFixed(2)]));
+}
+const EXAMPLE_EVENINGS: EveningKind[] = ["shift", "making", "going_out", "shift", "nothing"];
+
 export function PaydayForm({
   available,
   carried,
   days,
+  demo = false,
 }: {
   available: number;
   carried: Record<string, number>;
   days: string[];
+  demo?: boolean;
 }) {
   const [values, setValues] = useState<Record<string, string>>({});
   const [plan, setPlan] = useState<(EveningKind | null)[]>(
     Array(EVENINGS_PER_WEEK).fill(null),
   );
+  const fillExample = () => {
+    setValues(exampleSplit(available));
+    setPlan(Array.from({ length: EVENINGS_PER_WEEK }, (_, i) => EXAMPLE_EVENINGS[i % EXAMPLE_EVENINGS.length]));
+  };
 
   const assigned = useMemo(
     () =>
@@ -54,6 +72,11 @@ export function PaydayForm({
 
   return (
     <>
+      {demo && (
+        <button type="button" className="demo-fill" onClick={fillExample}>
+          Fill in an example
+        </button>
+      )}
       <div className="card">
         {ALLOCATABLE_TYPES.map((t) => (
           <div className="field" key={t}>

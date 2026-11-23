@@ -5,6 +5,7 @@ import { gbp, gbpShort } from "@/lib/money";
 import { ALLOCATABLE_TYPES, ENVELOPES } from "@/lib/envelopes";
 import { eveningDay, eveningsFor, envelopes, londonToday, paydayView, shortDay } from "@/lib/engine";
 import { EVENINGS, EVENINGS_PER_WEEK } from "@/lib/evenings";
+import { demoMode } from "@/lib/demo";
 import { paydayAction } from "../actions";
 import { Nav } from "../nav";
 import { PaydayForm } from "./payday-form";
@@ -112,6 +113,15 @@ export default async function Payday({
       <h1>Week {view.week.idx}</h1>
       <p className="sub">Every pound gets a job before the week starts.</p>
 
+      {demoMode() && (
+        <div className="note demo-explain">
+          <p>
+            Split the wage across the four envelopes until &quot;Still to assign&quot; reads £0, then pick something
+            for each of the five evenings. Nothing here is permanent; the demo resets overnight.
+          </p>
+        </div>
+      )}
+
       {e && <div className="note err">{e}</div>}
 
       <div className="card">
@@ -145,6 +155,7 @@ export default async function Payday({
           available={view.available}
           carried={Object.fromEntries(ALLOCATABLE_TYPES.map((t) => [t, balanceOf(t)]))}
           days={eveningDays}
+          demo={demoMode()}
         />
       </form>
 

@@ -111,6 +111,16 @@ button:active, .btn:active { transform: translateY(1px); }
 
 details.card > summary { cursor: pointer; font-weight: 600; }
 
+/* Demo strip: who you are, on every page. */
+.demo-strip { background: var(--surface-2); border-bottom: 1px solid var(--line); color: var(--muted);
+  font-size: 13px; text-align: center; padding: 7px 12px; }
+.demo-strip a { font-weight: 600; }
+
+/* Demo: payday explained, and the example-fill button. */
+.demo-explain { border: 1px solid var(--accent); }
+.demo-explain p { margin: 0; }
+button.demo-fill { text-align: center; font-weight: 600; }
+
 /* Demo front door: one tap per player. */
 .demo-doors { margin: 20px 0 8px; }
 .demo-doors button { text-align: left; }
