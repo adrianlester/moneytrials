@@ -6,7 +6,7 @@ The clearest product call came from simulation. 20,000 simulated seasons showed 
 
 Try the demo at [moneytrials.co.uk](https://moneytrials.co.uk). The players are made up and it resets every night. The code, tests and simulation scripts are in this repo.
 
-![Today, as the demo player Robin: the daily card and tonight's evening](docs/screenshots/today-robin.png)
+<img src="docs/screenshots/today-robin.png" alt="Today, as the demo player Robin: the daily card and tonight's evening" width="300">
 
 ## The problem and the bet
 
@@ -50,7 +50,7 @@ The same run showed a careful player runs out of goals. I added the option to bu
 
 The second decision was the payday gate. A soft version of "every pound gets a job" let leftover money be nibbled by a small impulse buy. Under that rule, £47 left unassigned cost £5. Ignoring the principle was almost free. On 18 September I made the gate strict: payday refuses to go through until "still to assign" reads £0.
 
-![Payday, as the demo player Sam: the wage to allocate before the week can start](docs/screenshots/payday-sam.png)
+<img src="docs/screenshots/payday-sam.png" alt="Payday, as the demo player Sam: the wage to allocate before the week can start" width="300">
 
 ## What real play showed
 
@@ -68,7 +68,7 @@ I removed loans on the day play started. Under-18s can't get credit in the UK, a
 
 Next time the season will be four to six weeks. Twelve is too long. Four to six is enough to play it, reflect, learn and go again.
 
-![The parent view, as the demo parent Dad: one request waiting for a decision](docs/screenshots/parent-dad.png)
+<img src="docs/screenshots/parent-dad.png" alt="The parent view, as the demo parent Dad: one request waiting for a decision" width="300">
 
 ## What this doesn't show
 
