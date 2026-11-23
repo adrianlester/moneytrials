@@ -62,7 +62,7 @@ The game fed a real hobby. One of them is building stock for a real craft sale, 
 
 The surprise was a fundraiser. One of them started one for herself, named "Me", with a £67 target. Her sister gave £2.
 
-What I got wrong was the interface. As the parent I couldn't tell why something was waiting for me, or what was happening each day. The guidance is weak and it looks plain. A UI pass on the public demo is planned and not yet built.
+What I got wrong was the interface. As the parent I couldn't tell why something was waiting for me, or what was happening each day. The guidance is weak and it looks plain. A first UI pass went live on the public demo on 23 November: one tap to try it as a player or as the parent, a clearer Today screen, and payday explained as you go. The screenshots here are from before it.
 
 I removed loans on the day play started. Under-18s can't get credit in the UK, and I didn't want it shown as an easy option.
 
